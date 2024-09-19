@@ -1,5 +1,8 @@
+using VoxelGame.Graphics;
+using VoxelGame.Logic;
+
 namespace VoxelGame.Voxels{
-    public class Chunk
+    public class Chunk : GameObject
 {
     private const int Width = 16;
     private const int Height = 256;
@@ -7,9 +10,16 @@ namespace VoxelGame.Voxels{
 
     private Voxel[,,] blocks;
 
+    private MeshRenderer _renderer;
+
     public Chunk()
     {
         blocks = new Voxel[Width, Height, Depth];
+    }
+
+    public override void Update() {
+
+        if (this._renderer != default(MeshRenderer)) Render();
     }
 
     public void SetVoxel(int x, int y, int z, Voxel voxel)
@@ -32,13 +42,22 @@ namespace VoxelGame.Voxels{
         }
         else
         {
-            throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
+            return new Voxel(0,0);
+            //throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
         }
     }
 
     private bool IsInBounds(int x, int y, int z)
     {
         return x >= 0 && x < Width && y >= 0 && y < Height && z >= 0 && z < Depth;
+    }
+
+    public void setMeshRenderer(MeshRenderer MeshRenderer){
+        _renderer = MeshRenderer;
+    }
+
+    public void Render(){
+        _renderer.Render();
     }
 }
 }

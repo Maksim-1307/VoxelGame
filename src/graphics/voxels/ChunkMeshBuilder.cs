@@ -2,7 +2,7 @@ using VoxelGame.Voxels;
 using OpenTK.Mathematics;
 
 namespace VoxelGame.Graphics{
-    public class BlocksRenderer{
+    public class ChunkMeshBuilder{
 
         private VoxelStorage VoxelStorage;
 
@@ -19,11 +19,13 @@ namespace VoxelGame.Graphics{
         private int _y;
         private int _z;
 
-        public BlocksRenderer (VoxelStorage VoxelStorage){
+        public ChunkMeshBuilder (VoxelStorage VoxelStorage){
             this.VoxelStorage = VoxelStorage;
         }
 
-        public Mesh RenderChunkAt(int chunkX, int chunkZ){
+        public Mesh BuildMeshOfChunkAt(int chunkX, int chunkZ){
+
+            Console.WriteLine("rendered");
 
             int blockX = chunkX * 16;
             int blockZ = chunkZ * 16;
@@ -31,7 +33,8 @@ namespace VoxelGame.Graphics{
             for (_x = blockX; _x < blockX + 16; _x++){
                 for (_z = blockZ; _z < blockZ + 16; _z++){
                     for (_y = 0; _y < 256; _y++){
-                        CubeModel(_x, _y, _z);
+                        if (VoxelStorage.GetVoxel(_x, _y, _z).Id != 0) CubeModel(_x, _y, _z);
+                        //VoxelStorage.GetVoxel(_x, _y, _z);
                     }
                 }
             }
@@ -86,7 +89,7 @@ namespace VoxelGame.Graphics{
         private void CubeModel(int x, int y, int z){
             bool [] OpenedFaces = OpenedAround(x, y, z);
             for (int face = 0; face < 6; face++){
-                if (!OpenedFaces[face]) face++;
+                if (OpenedFaces[face]){
                 switch (face) {
                     // X+
                     case 0:
@@ -137,6 +140,7 @@ namespace VoxelGame.Graphics{
                     index(0, 1, 3, 1, 2, 3);
                 } else {
                     index(3, 1, 0, 3, 2, 1);
+                }
                 }
             }
         }

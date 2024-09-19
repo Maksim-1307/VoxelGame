@@ -14,21 +14,18 @@ namespace VoxelGame.Graphics
 
         private float _fov = MathHelper.PiOver2;
 
+        public Vector3 Position { get; set; }
+
+        public float AspectRatio { private get; set; }
+        public Vector3 Front => _front;
+        public Vector3 Up => _up;
+        public Vector3 Right => _right;
+
         public Camera(Vector3 position, float aspectRatio)
         {
             Position = position;
             AspectRatio = aspectRatio;
         }
-
-        public Vector3 Position { get; set; }
-
-        public float AspectRatio { private get; set; }
-
-        public Vector3 Front => _front;
-
-        public Vector3 Up => _up;
-
-        public Vector3 Right => _right;
 
         public float Pitch
         {
@@ -80,6 +77,10 @@ namespace VoxelGame.Graphics
             _front = Vector3.Normalize(_front);
 
             _right = Vector3.Normalize(Vector3.Cross(_front, Vector3.UnitY));
+        }
+
+        public Vector3 GetPosition(){
+            return this.Position;
         }
     }
 }

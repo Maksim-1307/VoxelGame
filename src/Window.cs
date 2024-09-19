@@ -2,11 +2,14 @@ using System;
 using VoxelGame.Graphics;
 using VoxelGame.Time;
 using VoxelGame.Logic;
+using VoxelGame.Voxels;
+using VoxelGame.World;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
+using System.Threading;
 
 namespace VoxelGame
 {
@@ -46,6 +49,13 @@ namespace VoxelGame
 
         private FPSCounter FPSCounter;
 
+        private Generator generator;
+        private VoxelStorage voxelStorage;
+        private ChunkMeshBuilder meshBuilder;
+        private ChunksController chunksController;
+
+        Thread myThread;
+
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {}
@@ -54,14 +64,22 @@ namespace VoxelGame
         {
             base.OnLoad();
 
-            GameObject.GameObjectsUpdate();
+            GameObject.GameObjectsStart();
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
 
+            generator = new Generator();
+            voxelStorage = new VoxelStorage(generator);
+            meshBuilder = new ChunkMeshBuilder(voxelStorage);
+
+
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
+            Console.WriteLine("Cam initialized");
             _renderer = new MeshRenderer(_camera);
-            _mesh = new Mesh(_vertices, _indices);
+            _mesh = meshBuilder.BuildMeshOfChunkAt(1,1);
+
+            chunksController = new ChunksController(_camera, voxelStorage);
             
             _shader = new Shader("res/shaders/shader.vert", "res/shaders/shader.frag");
             _shader.Use();
@@ -82,6 +100,8 @@ namespace VoxelGame
             CursorState = CursorState.Grabbed;
 
             FPSCounter = new FPSCounter();
+
+            myThread = new Thread(update_mesh);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -92,8 +112,9 @@ namespace VoxelGame
             _time += 4.0 * e.Time;
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GameObject.GameObjectsUpdate();
 
-            _renderer.Render();
+            _renderer.RenderAt(0.0f,0.0f,0.0f);
 
             SwapBuffers();
 
@@ -108,7 +129,7 @@ namespace VoxelGame
                 return;
             }
 
-            GameObject.GameObjectsUpdate();
+            //GameObject.GameObjectsUpdate();
 
             var input = KeyboardState;
 
@@ -146,6 +167,17 @@ namespace VoxelGame
                 _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
             }
 
+
+
+            if (input.IsKeyDown(Keys.O))
+            {
+                if (!myThread.IsAlive) {
+                    myThread = new Thread(update_mesh);
+                    myThread.IsBackground = true;
+                    myThread.Start();
+                }
+            }
+
             var mouse = MouseState;
 
             if (_firstMove) 
@@ -169,6 +201,10 @@ namespace VoxelGame
             base.OnMouseWheel(e);
 
             _camera.Fov -= e.OffsetY;
+        }
+
+        private void update_mesh(){
+            _mesh = meshBuilder.BuildMeshOfChunkAt(1,1);
         }
 
         protected override void OnResize(ResizeEventArgs e)

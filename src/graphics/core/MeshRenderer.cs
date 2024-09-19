@@ -20,12 +20,14 @@ namespace VoxelGame.Graphics{
         private int _EBO;
         private int _VBO;
         private int _VAO;
+
+        private Vector3 _position;
+
+        private bool _buffersLoaded = false;
         
         public MeshRenderer(Camera Camera){
             _camera = Camera;
         }
-
-        private bool _buffersLoaded = false;
 
         public void setMesh(Mesh Mesh){
             _mesh = Mesh;
@@ -38,8 +40,11 @@ namespace VoxelGame.Graphics{
             _texture = Texture;
             _texture2 = Texture;
         }
+        public void setPosition(Vector3 Position){
+            _position = Position;
+        }
 
-        public void Render(){
+        public void RenderAt(float x, float y, float z){
             if (!_buffersLoaded) loadBuffers();
 
             GL.BindVertexArray(_VAO);
@@ -48,12 +53,16 @@ namespace VoxelGame.Graphics{
             _texture2.Use(TextureUnit.Texture1);
             _shader.Use();
 
-            var model = Matrix4.Identity * Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(1.0f));
+            var model = Matrix4.Identity * Matrix4.CreateTranslation(x, y, z);
             _shader.SetMatrix4("model", model);
             _shader.SetMatrix4("view", _camera.GetViewMatrix());
             _shader.SetMatrix4("projection", _camera.GetProjectionMatrix());
 
             GL.DrawElements(PrimitiveType.Triangles, _mesh.indices.Length, DrawElementsType.UnsignedInt, 0);
+        }
+
+        public void Render(){
+            RenderAt(_position.X, _position.Y, _position.Z);
         }
         
         private void loadBuffers(){
