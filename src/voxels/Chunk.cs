@@ -54,6 +54,7 @@ namespace VoxelGame.Voxels{
 
     public void setMeshRenderer(MeshRenderer MeshRenderer){
         _renderer = MeshRenderer;
+        Console.WriteLine("Chunk at: " );
     }
 
     public void Render(){
