@@ -5,8 +5,8 @@ namespace VoxelGame.Voxels{
 
     public class VoxelStorage
     {
-        private Dictionary<(int x, int z), Chunk> chunks = new Dictionary<(int, int), Chunk>();
-        private Generator Generator;
+        public Dictionary<(int x, int z), Chunk> chunks = new Dictionary<(int, int), Chunk>();
+        public Generator Generator;
 
         public VoxelStorage (Generator generator) {
             this.Generator = generator;

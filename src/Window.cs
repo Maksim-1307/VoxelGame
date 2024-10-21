@@ -51,7 +51,7 @@ namespace VoxelGame
 
         private Generator generator;
         private VoxelStorage voxelStorage;
-        private ChunkMeshBuilder meshBuilder;
+        private ChunkRenderer meshBuilder;
         private ChunksController chunksController;
 
         Thread myThread;
@@ -71,7 +71,7 @@ namespace VoxelGame
 
             generator = new Generator();
             voxelStorage = new VoxelStorage(generator);
-            meshBuilder = new ChunkMeshBuilder(voxelStorage);
+            meshBuilder = new ChunkRenderer(voxelStorage);
 
 
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
@@ -138,7 +138,7 @@ namespace VoxelGame
                 Close();
             }
 
-            const float cameraSpeed = 1.5f;
+            const float cameraSpeed = 15.5f;
             const float sensitivity = 0.2f;
 
             if (input.IsKeyDown(Keys.W))

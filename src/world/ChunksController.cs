@@ -10,7 +10,8 @@ namespace VoxelGame.World{
         private Camera _camera;
         private VoxelStorage _voxelStorage;
         private uint _renderDistance = 5;
-        private ChunkMeshBuilder _meshBuilder;
+        private ChunkRenderer _meshBuilder;
+        private WorldRenderer _worldRenderer;
 
         private bool flag = true;
 
@@ -19,7 +20,8 @@ namespace VoxelGame.World{
         public ChunksController(Camera Camera, VoxelStorage VoxelStorage){
             _camera = Camera;
             _voxelStorage = VoxelStorage;
-            _meshBuilder = new ChunkMeshBuilder(_voxelStorage);
+            _meshBuilder = new ChunkRenderer(_voxelStorage);
+            _worldRenderer = new WorldRenderer(_voxelStorage, _camera);
         }
 
         private void Start(){
@@ -28,6 +30,7 @@ namespace VoxelGame.World{
 
         public override void Update(){
             if (UpdateChunkPos()) LoadChunks();
+            _worldRenderer.renderChunks();
         }
 
         // returns true if pos changed
@@ -53,7 +56,7 @@ namespace VoxelGame.World{
             Console.WriteLine("chunk changed");
             for (int x = 0; x < 5; x++){
                 for (int z = 0; z < 5; z++){
-                    LoadChunk(x, z);
+                    //LoadChunk(x, z);
                 }
             }
             flag = false;
@@ -66,12 +69,12 @@ namespace VoxelGame.World{
         }
 
         private void LoadChunk(int x, int z) {
-            MeshRenderer chunkRenderer = new MeshRenderer(_camera);
-            chunkRenderer.setPosition(new Vector3((float)x * 16, 0.0f, (float)z * 16));
-            chunkRenderer.setMesh(_meshBuilder.BuildMeshOfChunkAt(x, z));
-            chunkRenderer.setTexture(Texture.LoadFromFile("res/textures/container.png"));
-            chunkRenderer.setShader(new Shader("res/shaders/shader.vert", "res/shaders/shader.frag"));
-            _voxelStorage.GetOrCreateChunk(x, z).setMeshRenderer(chunkRenderer);
+            // MeshRenderer chunkRenderer = new MeshRenderer(_camera);
+            // chunkRenderer.setPosition(new Vector3((float)x * 16, 0.0f, (float)z * 16));
+            // chunkRenderer.setMesh(_meshBuilder.BuildMeshOfChunkAt(x, z));
+            // chunkRenderer.setTexture(Texture.LoadFromFile("res/textures/container.png"));
+            // chunkRenderer.setShader(new Shader("res/shaders/shader.vert", "res/shaders/shader.frag"));
+            _voxelStorage.GetOrCreateChunk(x, z);
         }
 
     }
