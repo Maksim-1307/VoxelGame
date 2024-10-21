@@ -27,8 +27,11 @@ namespace VoxelGame.Graphics{
 
             Console.WriteLine("rendered");
 
-            // vertices = new List<float>(1024);
-            // indices = new List<uint>(256);
+            vertices = new List<float>(1024);
+            indices = new List<uint>(256);
+            indexOffset = 0;
+            verticesIndex = 0;
+            indicesIndex = 0;
 
             int blockX = chunkX * 16;
             int blockZ = chunkZ * 16;

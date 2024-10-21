@@ -23,6 +23,7 @@ namespace VoxelGame.Graphics {
         public void draw(){
             GL.BindVertexArray(VAO);
             GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
+            GL.BindVertexArray(0);
         }
 
         private void loadBuffers(){

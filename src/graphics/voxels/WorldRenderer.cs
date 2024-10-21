@@ -32,7 +32,7 @@ namespace VoxelGame.Graphics{
 
         public void renderChunks(){
             foreach((int x, int z) chunkPos in _voxelStorage.chunks.Keys.ToArray()) {
-                if (chunkPos.Item1 < 10 && chunkPos.Item2 < 10 && chunkPos.Item1 >0 && chunkPos.Item2 > 0){
+                if (chunkPos.Item1 < 5 && chunkPos.Item2 < 5 && chunkPos.Item1 >0 && chunkPos.Item2 > 0){
                     renderChunk(chunkPos.Item1, chunkPos.Item2);
                 }
             }
@@ -45,7 +45,7 @@ namespace VoxelGame.Graphics{
             _texture2.Use(TextureUnit.Texture1);
             _shader.Use();
 
-            var model = Matrix4.Identity * Matrix4.CreateTranslation(chunkX*16.0f, 0.0f, chunkZ*16.0f);
+            var model = Matrix4.Identity * Matrix4.CreateTranslation(chunkX*0.0f, 0.0f, chunkZ*0.0f);
 
             _shader.SetMatrix4("model", model);
             _shader.SetMatrix4("view", _camera.GetViewMatrix());

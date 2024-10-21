@@ -29,7 +29,7 @@ namespace VoxelGame.World{
         }
 
         public override void Update(){
-            if (UpdateChunkPos()) LoadChunks();
+            LoadChunks();
             _worldRenderer.renderChunks();
         }
 
@@ -56,7 +56,7 @@ namespace VoxelGame.World{
             Console.WriteLine("chunk changed");
             for (int x = 0; x < 5; x++){
                 for (int z = 0; z < 5; z++){
-                    //LoadChunk(x, z);
+                    LoadChunk(x, z);
                 }
             }
             flag = false;
