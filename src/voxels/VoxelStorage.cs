@@ -30,9 +30,11 @@ namespace VoxelGame.Voxels{
             int blockX = x % 16;
             int blockZ = z % 16;
 
-            //if (blockX < 0) blockX += 16; //chunkX -= 1;
-            //if (blockZ < 0) blockZ += 16; //chunkZ -= 1;
-            if (chunkX < 0) {
+            // transformations for negative directions
+            if (chunkX == 0 && x < 0){
+                chunkX = -1;
+                blockX += 16;
+            } else if (chunkX < 0) {
                 blockX += 16;
                 chunkX -= 1;
                 if (blockX == 16) {
@@ -40,7 +42,10 @@ namespace VoxelGame.Voxels{
                     chunkX += 1;
                 }
             }
-            if (chunkZ < 0){
+            if (chunkZ == 0 && z < 0){
+                chunkZ = -1;
+                blockZ += 16;
+            } else if (chunkZ < 0){
                 blockZ += 16;
                 chunkZ -= 1;
                 if (blockZ == 16) {
