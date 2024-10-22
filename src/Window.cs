@@ -39,7 +39,6 @@ namespace VoxelGame
         private Texture _texture2;
         private Camera _camera;
         private Mesh _mesh;
-        private MeshRenderer _renderer;
 
         private bool _firstMove = true;
 
@@ -76,7 +75,6 @@ namespace VoxelGame
 
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
             Console.WriteLine("Cam initialized");
-            _renderer = new MeshRenderer(_camera);
             _mesh = meshBuilder.BuildMeshOfChunkAt(1,1);
 
             chunksController = new ChunksController(_camera, voxelStorage);
@@ -92,10 +90,6 @@ namespace VoxelGame
 
             _shader.SetInt("texture0", 0);
             _shader.SetInt("texture1", 1);
-
-            _renderer.setMesh(_mesh);
-            _renderer.setTexture(_texture);
-            _renderer.setShader(_shader);
 
             CursorState = CursorState.Grabbed;
 
@@ -113,8 +107,6 @@ namespace VoxelGame
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GameObject.GameObjectsUpdate();
-
-            _renderer.RenderAt(0.0f,0.0f,0.0f);
 
             SwapBuffers();
 

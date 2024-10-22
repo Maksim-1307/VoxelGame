@@ -10,8 +10,6 @@ namespace VoxelGame.Voxels{
 
     private Voxel[,,] blocks;
 
-    private MeshRenderer _renderer;
-
     public Chunk()
     {
         blocks = new Voxel[Width, Height, Depth];
@@ -19,7 +17,6 @@ namespace VoxelGame.Voxels{
 
     public override void Update() {
 
-        if (this._renderer != default(MeshRenderer)) Render();
     }
 
     public void SetVoxel(int x, int y, int z, Voxel voxel)
@@ -52,13 +49,8 @@ namespace VoxelGame.Voxels{
         return x >= 0 && x < Width && y >= 0 && y < Height && z >= 0 && z < Depth;
     }
 
-    public void setMeshRenderer(MeshRenderer MeshRenderer){
-        _renderer = MeshRenderer;
-        Console.WriteLine("Chunk at: " );
-    }
-
     public void Render(){
-        _renderer.Render();
+
     }
 }
 }

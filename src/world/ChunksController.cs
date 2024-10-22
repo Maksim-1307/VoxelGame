@@ -54,8 +54,8 @@ namespace VoxelGame.World{
         private void LoadChunks() {
             if (!flag) return;
             Console.WriteLine("chunk changed");
-            for (int x = 0; x < 5; x++){
-                for (int z = 0; z < 5; z++){
+            for (int x = -10; x < 5; x++){
+                for (int z = -10; z < 5; z++){
                     LoadChunk(x, z);
                 }
             }

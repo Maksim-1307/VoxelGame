@@ -30,6 +30,25 @@ namespace VoxelGame.Voxels{
             int blockX = x % 16;
             int blockZ = z % 16;
 
+            //if (blockX < 0) blockX += 16; //chunkX -= 1;
+            //if (blockZ < 0) blockZ += 16; //chunkZ -= 1;
+            if (chunkX < 0) {
+                blockX += 16;
+                chunkX -= 1;
+                if (blockX == 16) {
+                    blockX = 0;
+                    chunkZ += 1;
+                }
+            }
+            if (chunkZ < 0){
+                blockZ += 16;
+                chunkZ -= 1;
+                if (blockZ == 16) {
+                    blockZ = 0;
+                    chunkX += 1;
+                }
+            }
+
             Chunk chunk = GetOrCreateChunk(chunkX, chunkZ);
             return chunk.GetVoxel(blockX, y, blockZ);
         }

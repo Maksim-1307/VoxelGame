@@ -32,7 +32,7 @@ namespace VoxelGame.Graphics{
 
         public void renderChunks(){
             foreach((int x, int z) chunkPos in _voxelStorage.chunks.Keys.ToArray()) {
-                if (chunkPos.Item1 < 5 && chunkPos.Item2 < 5 && chunkPos.Item1 >0 && chunkPos.Item2 > 0){
+                if (chunkPos.Item1 < 5 && chunkPos.Item2 < 5 && chunkPos.Item1 >-10 && chunkPos.Item2 > -10){
                     renderChunk(chunkPos.Item1, chunkPos.Item2);
                 }
             }
