@@ -34,11 +34,7 @@ namespace VoxelGame
         private int _VBO;
         private int _VAO;
 
-        private Shader _shader;
-        private Texture _texture;
-        private Texture _texture2;
         private Camera _camera;
-        private Mesh _mesh;
 
         private bool _firstMove = true;
 
@@ -52,8 +48,6 @@ namespace VoxelGame
         private VoxelStorage voxelStorage;
         private ChunkRenderer meshBuilder;
         private ChunksController chunksController;
-
-        Thread myThread;
 
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
@@ -71,31 +65,12 @@ namespace VoxelGame
             generator = new Generator();
             voxelStorage = new VoxelStorage(generator);
             meshBuilder = new ChunkRenderer(voxelStorage);
-
-
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
-            Console.WriteLine("Cam initialized");
-            _mesh = meshBuilder.BuildMeshOfChunkAt(1,1);
-
             chunksController = new ChunksController(_camera, voxelStorage);
             
-            _shader = new Shader("res/shaders/shader.vert", "res/shaders/shader.frag");
-            _shader.Use();
-
-            _texture = Texture.LoadFromFile("res/textures/container.png");
-            _texture.Use(TextureUnit.Texture0);
-
-            _texture2 = Texture.LoadFromFile("res/textures/awesomeface.png");
-            _texture2.Use(TextureUnit.Texture1);
-
-            _shader.SetInt("texture0", 0);
-            _shader.SetInt("texture1", 1);
-
             CursorState = CursorState.Grabbed;
 
             FPSCounter = new FPSCounter();
-
-            myThread = new Thread(update_mesh);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -160,16 +135,6 @@ namespace VoxelGame
             }
 
 
-
-            if (input.IsKeyDown(Keys.O))
-            {
-                if (!myThread.IsAlive) {
-                    myThread = new Thread(update_mesh);
-                    myThread.IsBackground = true;
-                    myThread.Start();
-                }
-            }
-
             var mouse = MouseState;
 
             if (_firstMove) 
@@ -193,10 +158,6 @@ namespace VoxelGame
             base.OnMouseWheel(e);
 
             _camera.Fov -= e.OffsetY;
-        }
-
-        private void update_mesh(){
-            _mesh = meshBuilder.BuildMeshOfChunkAt(1,1);
         }
 
         protected override void OnResize(ResizeEventArgs e)

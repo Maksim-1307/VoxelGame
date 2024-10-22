@@ -24,13 +24,13 @@ namespace VoxelGame.World{
             _worldRenderer = new WorldRenderer(_voxelStorage, _camera);
         }
 
-        private void Start(){
-
+        public override void Start(){
+            LoadChunk(0, 0);
         }
 
         public override void Update(){
-            LoadChunks();
-            _worldRenderer.renderChunks();
+            if (UpdateChunkPos()) LoadChunk(chunkPos.Item1, chunkPos.Item2);
+            _worldRenderer.renderChunks(chunkPos);
         }
 
         // returns true if pos changed
@@ -48,32 +48,16 @@ namespace VoxelGame.World{
 
         public void SetRenderDistance(uint newDistance) {
             _renderDistance = newDistance;
-            LoadChunks();
+            //LoadChunks();
         }
 
         private void LoadChunks() {
             if (!flag) return;
             Console.WriteLine("chunk changed");
-            for (int x = -10; x < 5; x++){
-                for (int z = -10; z < 5; z++){
-                    LoadChunk(x, z);
-                }
-            }
-            flag = false;
-            // MeshRenderer chunkRenderer = new MeshRenderer(_camera);
-            // chunkRenderer.setPosition(new Vector3((float)chunkPos.Item1 * 16, 0.0f, (float)chunkPos.Item2 * 16));
-            // chunkRenderer.setMesh(_meshBuilder.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2));
-            // chunkRenderer.setTexture(Texture.LoadFromFile("res/textures/container.png"));
-            // chunkRenderer.setShader(new Shader("res/shaders/shader.vert", "res/shaders/shader.frag"));
-            // _voxelStorage.GetOrCreateChunk(chunkPos.Item1, chunkPos.Item2).setMeshRenderer(chunkRenderer);
+            LoadChunk(0, 0);
         }
 
         private void LoadChunk(int x, int z) {
-            // MeshRenderer chunkRenderer = new MeshRenderer(_camera);
-            // chunkRenderer.setPosition(new Vector3((float)x * 16, 0.0f, (float)z * 16));
-            // chunkRenderer.setMesh(_meshBuilder.BuildMeshOfChunkAt(x, z));
-            // chunkRenderer.setTexture(Texture.LoadFromFile("res/textures/container.png"));
-            // chunkRenderer.setShader(new Shader("res/shaders/shader.vert", "res/shaders/shader.frag"));
             _voxelStorage.GetOrCreateChunk(x, z);
         }
 

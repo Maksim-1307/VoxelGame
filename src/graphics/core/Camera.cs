@@ -65,7 +65,7 @@ namespace VoxelGame.Graphics
 
         public Matrix4 GetProjectionMatrix()
         {
-            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100f);
+            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 1000000f);
         }
 
         private void UpdateVectors()

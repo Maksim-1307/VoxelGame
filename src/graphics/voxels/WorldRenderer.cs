@@ -21,18 +21,22 @@ namespace VoxelGame.Graphics{
         private Camera _camera;
         private ChunkRenderer _chunkRenderer;
 
+        public static uint _renderDistance = 6;
+
         public WorldRenderer(VoxelStorage voxelStorage, Camera camera){
             _voxelStorage = voxelStorage;
             _camera = camera;
-            _texture = Texture.LoadFromFile("res/textures/container.png");
-            _texture2 = Texture.LoadFromFile("res/textures/container.png");
+            _texture = Texture.LoadFromFile("res/textures/texture.png");
+            _texture2 = Texture.LoadFromFile("res/textures/texture.png");
             _shader = new Shader("res/shaders/shader.vert", "res/shaders/shader.frag");
             _chunkRenderer = new ChunkRenderer(_voxelStorage);
         }
 
-        public void renderChunks(){
+        public void renderChunks((int x, int y) centerChunkPos){
             foreach((int x, int z) chunkPos in _voxelStorage.chunks.Keys.ToArray()) {
-                if (chunkPos.Item1 < 5 && chunkPos.Item2 < 5 && chunkPos.Item1 >-10 && chunkPos.Item2 > -10){
+                int x = chunkPos.Item1 - centerChunkPos.Item1;
+                int y = chunkPos.Item2 - centerChunkPos.Item2;
+                if (x*x + y*y <= _renderDistance * _renderDistance){
                     renderChunk(chunkPos.Item1, chunkPos.Item2);
                 }
             }
