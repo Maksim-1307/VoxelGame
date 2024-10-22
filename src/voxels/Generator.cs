@@ -24,7 +24,7 @@ namespace VoxelGame.Voxels{
 
             for (int x = 0; x < 16; x++){
                 for (int z = 0; z < 16; z++){
-                    int height = (chunkAbsPosX + x + chunkAbsPosZ + z + 20) / 3;//(int)(32 * ( 1.0f + noise.GetNoise(chunkAbsPosX + x, chunkAbsPosZ + z)));
+                    int height = (chunkAbsPosX + x + chunkAbsPosZ + z + 100) / 3;//(int)(32 * ( 1.0f + noise.GetNoise(chunkAbsPosX + x, chunkAbsPosZ + z)));
                     for (int y = 0; y < 256; y++){
                         //Console.WriteLine(height);
                         if (y < height) {

@@ -37,7 +37,7 @@ namespace VoxelGame.Voxels{
                 chunkX -= 1;
                 if (blockX == 16) {
                     blockX = 0;
-                    chunkZ += 1;
+                    chunkX += 1;
                 }
             }
             if (chunkZ < 0){
@@ -45,7 +45,7 @@ namespace VoxelGame.Voxels{
                 chunkZ -= 1;
                 if (blockZ == 16) {
                     blockZ = 0;
-                    chunkX += 1;
+                    chunkZ += 1;
                 }
             }
 
