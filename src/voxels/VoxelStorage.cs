@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace VoxelGame.Voxels{
 
     public class VoxelStorage
     {
-        public Dictionary<(int x, int z), Chunk> chunks = new Dictionary<(int, int), Chunk>();
+        public ConcurrentDictionary<(int x, int z), Chunk> chunks = new ConcurrentDictionary<(int, int), Chunk>();
         public Generator Generator;
 
         public VoxelStorage (Generator generator) {

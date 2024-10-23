@@ -43,11 +43,23 @@ namespace VoxelGame.Graphics{
         }
 
         public void renderChunks((int x, int y) centerChunkPos){
-            (int x, int z) [] chunks = _voxelStorage.chunks.Keys.ToArray();
-            foreach ((int x, int z) chunkPos in chunks) {
+            //Console.WriteLine("Count of chunks: " + _voxelStorage.chunks.Count);
+            // (int x, int z)[] chunks;
+            // lock ()
+            // {
+            //     chunks = _voxelStorage.chunks.Keys.ToArray();
+            // }
+            // _dict.Keys.ElementAt(5)
+            // for (int i = 0; i < _voxelStorage.chunks.Count; i++){
+            //     (int x, int z) chunkPos = _voxelStorage.chunks.Keys.ElementAt(i);
+            // // }
+            //lock(chunks){
+            foreach ((int x, int z) chunkPos in _voxelStorage.chunks.Keys.ToArray())
+            {
                 int x = chunkPos.Item1 - centerChunkPos.Item1;
                 int y = chunkPos.Item2 - centerChunkPos.Item2;
-                if (x*x + y*y <= _renderDistance * _renderDistance){
+                if (x * x + y * y <= _renderDistance * _renderDistance)
+                {
 
                     renderChunk(chunkPos.Item1, chunkPos.Item2);
                     // if (_renderThread == null) {
@@ -56,6 +68,7 @@ namespace VoxelGame.Graphics{
                     // }
                 }
             }
+            //}
         }
 
         public void renderChunk(int chunkX, int chunkZ){
@@ -110,6 +123,7 @@ namespace VoxelGame.Graphics{
                 //Mesh mesh = new Mesh([],[]);
                 chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);
                 //renderChunk(chunkPos.x, chunkPos.z);
+                
             }
             
             return;
