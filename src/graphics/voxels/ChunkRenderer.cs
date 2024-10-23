@@ -25,8 +25,6 @@ namespace VoxelGame.Graphics{
 
         public Mesh BuildMeshOfChunkAt(int chunkX, int chunkZ){
 
-            Console.WriteLine("rendered");
-
             vertices = new List<float>(1024);
             indices = new List<uint>(256);
             indexOffset = 0;
@@ -40,7 +38,6 @@ namespace VoxelGame.Graphics{
                 for (_z = blockZ; _z < blockZ + 16; _z++){
                     for (_y = 0; _y < 256; _y++){
                         if (VoxelStorage.GetVoxel(_x, _y, _z).Id != 0) CubeModel(_x, _y, _z);
-                        //VoxelStorage.GetVoxel(_x, _y, _z);
                     }
                 }
             }

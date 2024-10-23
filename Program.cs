@@ -6,12 +6,6 @@ namespace VoxelGame
 {
     public static class Program
     {
-        private static void printArr(int[] arr){
-            Console.WriteLine("Array output: ");
-            for (int i = 0; i < 5; i++){
-                Console.WriteLine(arr[i]);
-            }
-        }
         private static void Main()
         {
             var nativeWindowSettings = new NativeWindowSettings()

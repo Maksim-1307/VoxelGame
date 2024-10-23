@@ -1,7 +1,7 @@
 using VoxelGame.Logic;
 using VoxelGame.Graphics;
 using VoxelGame.Voxels;
-
+using System.Threading;
 using OpenTK.Mathematics;
 
 namespace VoxelGame.World{
@@ -13,6 +13,8 @@ namespace VoxelGame.World{
         private ChunkRenderer _meshBuilder;
         private WorldRenderer _worldRenderer;
 
+        private Thread renderingThread;
+
         private bool flag = true;
 
         private (int, int) chunkPos;
@@ -22,6 +24,7 @@ namespace VoxelGame.World{
             _voxelStorage = VoxelStorage;
             _meshBuilder = new ChunkRenderer(_voxelStorage);
             _worldRenderer = new WorldRenderer(_voxelStorage, _camera);
+            LoadChunk(0,0);
         }
 
         public override void Start(){
@@ -53,7 +56,6 @@ namespace VoxelGame.World{
 
         private void LoadChunks() {
             if (!flag) return;
-            Console.WriteLine("chunk changed");
             LoadChunk(0, 0);
         }
 
