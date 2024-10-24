@@ -36,7 +36,7 @@ namespace VoxelGame.Graphics{
 
         public Text(string text) {
             _text = text;
-            _fontTexture = Texture.LoadFromFile("res/textures/lightbulb.png");
+            _fontTexture = Texture.LoadFromFile("res/textures/font.png");
             _shader = new Shader("res/shaders/fontShader.vert", "res/shaders/shader.frag");
             _mesh = genMeshOfCharacter();
         }
@@ -50,14 +50,20 @@ namespace VoxelGame.Graphics{
         public Mesh genMeshOfCharacter(){
             int texWidth = 512;
             int texHeight = 512;
-            (float x, float y) pos = (0, (texHeight - lineHeight * 1));
-            int w = 5;
+            int w0 = 5;
+            int lh = 11;
+            (float x, float y) pos = (0, 0);
+            float w = (float)w0 / (float)texWidth;
+            float h = (float)lh / (float)texHeight;
+            Console.WriteLine(h + " sdfdsfsd");
+           // w = 0.1f;
+            //h = 0.05f;
             return new Mesh(
                 [
-                    0.0f, 0.0f, 0.0f, 0.0f, 0.6f,
-                    0.5f, 0.0f, 0.0f, 0.4f, 0.6f,
-                    0.0f, 0.5f, 0.0f, 0.0f, 1.0f,
-                    0.5f, 0.5f, 0.0f, 0.4f, 1.0f
+                    0.0f, 0.0f, 0.0f, 0.0f, 1.0f - h,
+                    0.5f, 0.0f, 0.0f, w, 1.0f - h,
+                    0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 
+                    0.5f, 0.5f, 0.0f, w, 1.0f
                 ],
                 [
                     0, 1, 3, 0, 3, 2
