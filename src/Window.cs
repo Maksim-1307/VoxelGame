@@ -49,6 +49,9 @@ namespace VoxelGame
         private ChunkRenderer meshBuilder;
         private ChunksController chunksController;
 
+        // testing
+        private Text _text;
+
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {}
@@ -67,6 +70,9 @@ namespace VoxelGame
             meshBuilder = new ChunkRenderer(voxelStorage);
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
             chunksController = new ChunksController(_camera, voxelStorage);
+
+            // testing
+            _text = new Text("Hello World");
             
             CursorState = CursorState.Grabbed;
 

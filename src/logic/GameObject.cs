@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace VoxelGame.Logic{
     public class GameObject{
-        private static List<GameObject> ObjectsArray = new List<GameObject>();
+        private static ConcurrentBag<GameObject> ObjectsArray = new ConcurrentBag<GameObject>();
 
         public GameObject(){
             ObjectsArray.Add(this);
@@ -13,12 +14,12 @@ namespace VoxelGame.Logic{
 
         public static void GameObjectsUpdate(){
             for (int i = 0; i < ObjectsArray.Count; i++){
-                ObjectsArray[i].Update();
+                ObjectsArray.ToArray()[i].Update();
             }
         }
         public static void GameObjectsStart(){
             for (int i = 0; i < ObjectsArray.Count; i++){
-                ObjectsArray[i].Start();
+                ObjectsArray.ToArray()[i].Start();
             }
         }
     }

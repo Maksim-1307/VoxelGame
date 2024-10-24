@@ -11,9 +11,15 @@ namespace VoxelGame.Graphics
     {
         public readonly int Handle;
 
+        public int Width;
+        public int Height;
+
         public static Texture LoadFromFile(string path)
         {
             int handle = GL.GenTexture();
+
+            int width;
+            int height; 
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, handle);
@@ -24,12 +30,17 @@ namespace VoxelGame.Graphics
             {
                 ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
+                width = image.Width;
+                height = image.Height;
             }
             
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 
-            return new Texture(handle);
+            Texture texture = new Texture(handle);
+            texture.Width = width;
+            texture.Height = height;
+            return texture;
         }
 
         public Texture(int glHandle)
