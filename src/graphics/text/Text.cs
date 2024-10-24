@@ -21,6 +21,7 @@ namespace VoxelGame.Graphics{
         private Shader _shader;
         private string _text;
         private Mesh _mesh;
+        private Font _font;
 
         private const int lineHeight = 12;
 
@@ -38,7 +39,8 @@ namespace VoxelGame.Graphics{
             _text = text;
             _fontTexture = Texture.LoadFromFile("res/textures/font.png");
             _shader = new Shader("res/shaders/fontShader.vert", "res/shaders/shader.frag");
-            _mesh = genMeshOfCharacter();
+            _font = new Font("path");
+            _mesh = genMeshOfCharacter('1');
         }
 
         public override void Update(){
@@ -47,23 +49,28 @@ namespace VoxelGame.Graphics{
             _mesh.draw();
         }
 
-        public Mesh genMeshOfCharacter(){
+        public Mesh genMeshOfCharacter(char character){
+
+            Character ch = _font.getCharacter(character);
+
             int texWidth = 512;
             int texHeight = 512;
-            int w0 = 5;
+            int lineNum = ch.line;
+            int w0 = ch.width;
             int lh = 11;
-            (float x, float y) pos = (0, 0);
+            int posX = ch.posX;
+            int posY = lineNum * lh;
+            float fz = 10.0f;
+
+            (float x, float y) pos = ((float)posX / (float)texWidth, (float)posY / (float)texHeight * -1);
             float w = (float)w0 / (float)texWidth;
             float h = (float)lh / (float)texHeight;
-            Console.WriteLine(h + " sdfdsfsd");
-           // w = 0.1f;
-            //h = 0.05f;
             return new Mesh(
                 [
-                    0.0f, 0.0f, 0.0f, 0.0f, 1.0f - h,
-                    0.5f, 0.0f, 0.0f, w, 1.0f - h,
-                    0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 
-                    0.5f, 0.5f, 0.0f, w, 1.0f
+                    0.0f, 0.0f, 0.0f, 0.0f + pos.x, 1.0f - h + pos.y,
+                    w * fz, 0.0f, 0.0f, w    + pos.x, 1.0f - h + pos.y,
+                    0.0f, h * fz, 0.0f, 0.0f + pos.x, 1.0f     + pos.y, 
+                    w * fz, h * fz, 0.0f, w    + pos.x, 1.0f     + pos.y
                 ],
                 [
                     0, 1, 3, 0, 3, 2
@@ -72,5 +79,45 @@ namespace VoxelGame.Graphics{
         }
         
         
+    }
+
+    public class Font {
+
+        private Character [] CharactersData = [
+            new Character('a', 5, 0, 0),
+            new Character('b', 5, 5, 0),
+            new Character('C', 6, 12, 1),
+            new Character('1', 3, 5, 2)
+        ];
+        private Character nullCharacter = new Character(' ', 5, 0, 0);
+
+        public Font (string path) {
+
+        }
+
+
+        public Character getCharacter(char name){
+            for (int i = 0; i < CharactersData.Count(); i++){
+                if (CharactersData[i].name == name){
+                    return CharactersData[i];
+                }
+            }
+            return nullCharacter;
+        }
+    }
+
+    public class Character {
+
+        public char name;
+        public int width;
+        public int line;
+        public int posX;
+
+        public Character(char name, int width, int posX, int line){
+            this.name = name;
+            this.width = width;
+            this.line = line;
+            this.posX = posX;
+        }
     }
 }
