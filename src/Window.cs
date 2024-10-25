@@ -64,6 +64,9 @@ namespace VoxelGame
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            //GL.Ortho(left, right, bottom, top, -1.0, 1.0);
 
             generator = new Generator();
             voxelStorage = new VoxelStorage(generator);
@@ -72,7 +75,7 @@ namespace VoxelGame
             chunksController = new ChunksController(_camera, voxelStorage);
 
             // testing
-            _text = new Text("Hello World");
+            _text = new Text("VoxelGame indev");
             
             CursorState = CursorState.Grabbed;
 
@@ -88,6 +91,8 @@ namespace VoxelGame
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GameObject.GameObjectsUpdate();
+
+            _text.Draw(_camera);
 
             SwapBuffers();
 

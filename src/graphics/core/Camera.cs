@@ -68,6 +68,10 @@ namespace VoxelGame.Graphics
             return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 1000000f);
         }
 
+        public Matrix4 GetOrthoMatrix(){
+            return Matrix4.CreateOrthographic(1, 1 / AspectRatio, -1.0f, 1.0f);
+        }
+
         private void UpdateVectors()
         {
             _front.X = MathF.Cos(_pitch) * MathF.Cos(_yaw);
