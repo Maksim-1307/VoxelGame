@@ -8,7 +8,6 @@ using OpenTK.Windowing.Common;
 using OpenTK.Input;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL4;
-// using OpenTK.Graphics.ES30;
 using StbImageSharp;
 using OpenTK.Mathematics;
 using System.Collections.Generic;
@@ -20,10 +19,9 @@ using System.ComponentModel;
 
 using VoxelGame.Logic;
 using VoxelGame.Graphics;
-using VoxelGame.Voxels;
 
 namespace VoxelGame.Graphics{
-    public class Text : GameObject{
+    public class Text : UIelement{
 
         private Texture _fontTexture;
         private Shader _shader;
@@ -56,7 +54,7 @@ namespace VoxelGame.Graphics{
             _mesh = getMesh();
         }
 
-        public void Draw(Camera camera){
+        public override void Draw(Camera camera){
             //GL.BlendFuncSeparate(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha, BlendingFactor.One);
 
             //GL.BlendFunc();
@@ -66,10 +64,18 @@ namespace VoxelGame.Graphics{
             _shader.Use();
             _mesh.draw();
         }
+        public void Update(string newText){
+            _text = newText;
+            _mesh = getMesh();
+        }
 
         public Mesh getMesh(){
-            // renderCharacter('1');
-            // renderCharacter('a');
+            
+            vertices = [];
+            indices = [];
+            indexOffset = 0;
+            offset = (0.0f, 0.0f);
+            
             foreach (char c in _text){
                 renderCharacter(c);
             }
@@ -123,12 +129,7 @@ namespace VoxelGame.Graphics{
     public class Font {
 
         //private Character [] CharactersData = 
-        private List<Character> CharactersData = [
-            new Character('a', 5, 0, 0),
-            new Character('b', 5, 5, 0),
-            new Character('C', 6, 12, 1),
-            new Character('1', 3, 5, 2)
-        ];
+        private List<Character> CharactersData = [];
 
         private object jsonData;
 

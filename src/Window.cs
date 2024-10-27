@@ -10,6 +10,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
 using System.Threading;
+using System.Diagnostics;
 
 namespace VoxelGame
 {
@@ -48,6 +49,9 @@ namespace VoxelGame
         private VoxelStorage voxelStorage;
         private ChunkRenderer meshBuilder;
         private ChunksController chunksController;
+        private Canvas canvas;
+
+        Process proc = Process.GetCurrentProcess();
 
         // testing
         private Text _text;
@@ -73,9 +77,10 @@ namespace VoxelGame
             meshBuilder = new ChunkRenderer(voxelStorage);
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
             chunksController = new ChunksController(_camera, voxelStorage);
+            canvas = new Canvas(_camera);
 
             // testing
-            _text = new Text("VoxelGame indev");
+            //_text = new Text("VoxelGame indev");
             
             CursorState = CursorState.Grabbed;
 
@@ -86,13 +91,13 @@ namespace VoxelGame
         {
             base.OnRenderFrame(e);
 
-            FPSCounter.Update();
+            //FPSCounter.Update();
             _time += 4.0 * e.Time;
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GameObject.GameObjectsUpdate();
 
-            _text.Draw(_camera);
+            //_text.Draw(_camera);
 
             SwapBuffers();
 
@@ -106,6 +111,10 @@ namespace VoxelGame
             {
                 return;
             }
+
+            //proc = Process.GetCurrentProcess();
+            //double memoryUsageInMB = proc.WorkingSet64 / 1024.0 / 1024.0;
+            //_text.Update("memory usage " + memoryUsageInMB + " MB");
 
             //GameObject.GameObjectsUpdate();
 

@@ -104,9 +104,9 @@ namespace VoxelGame.Graphics{
                 return null;
                 // return (chunk mesh will be added in chunksMeshes in a thread)
                 //chunksMeshes[key] = _chunkRenderer.BuildMeshOfChunkAt(chunkX, chunkZ);
+            } else {
+                return chunksMeshes[key];
             }
-            return chunksMeshes[key];
-
         }
 
         void toggleRenderQueue(){
