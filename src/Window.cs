@@ -86,9 +86,9 @@ namespace VoxelGame
         }
 
         protected void loadBlocks(){
-            new Block(0, BlockModel.Air, (0, 0));
-            new Block(1, BlockModel.Cube, (1, 0));
-            new Block(2, BlockModel.Cube, (0, 1));
+            new Block(0, BlockModel.Air, [(0, 0)]);
+            new Block(1, BlockModel.Cube, [(1, 0)]);
+            new Block(2, BlockModel.Cube, [(1, 1), (0, 1), (0, 0)]);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
