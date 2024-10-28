@@ -101,17 +101,17 @@ namespace VoxelGame.Graphics{
                 switch (face) {
                     // X+
                     case 0:
-                        vertex(1.0f, 0.0f, 0.0f, uv.x, uv.y);
-                        vertex(1.0f, 0.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
-                        vertex(1.0f, 1.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
-                        vertex(1.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
+                        vertex(1.0f, 0.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
+                        vertex(1.0f, 0.0f, 1.0f, uv.x, uv.y);
+                        vertex(1.0f, 1.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
                         break;
                     // X-
                     case 1:
-                        vertex(0.0f, 0.0f, 0.0f, uv.x, uv.y);
-                        vertex(0.0f, 0.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
-                        vertex(0.0f, 1.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
-                        vertex(0.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
+                        vertex(0.0f, 0.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
+                        vertex(0.0f, 0.0f, 1.0f, uv.x, uv.y);
+                        vertex(0.0f, 1.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(0.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
                         break;
                     // Y+
                     case 2:
