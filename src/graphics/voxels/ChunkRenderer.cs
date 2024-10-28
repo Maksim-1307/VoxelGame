@@ -92,8 +92,8 @@ namespace VoxelGame.Graphics{
 
         private void CubeModel(int x, int y, int z){
             bool [] OpenedFaces = OpenedAround(x, y, z);
-            // Block block = Block.getBlockByVoxelId(VoxelStorage.GetVoxel(x,y,z));
-            (uint x, uint y) blockFaceUV = (1,2); // from block
+            Block block = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x,y,z).Id);
+            (uint x, uint y) blockFaceUV = block.GetUV(); // from block
             (float x, float y) uv = ((float)blockFaceUV.x / ATLAS_SIZE, (float)blockFaceUV.y / ATLAS_SIZE);
             
             for (int face = 0; face < 6; face++){

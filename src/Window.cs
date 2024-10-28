@@ -72,6 +72,7 @@ namespace VoxelGame
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             //GL.Ortho(left, right, bottom, top, -1.0, 1.0);
 
+            loadBlocks();
             generator = new Generator();
             voxelStorage = new VoxelStorage(generator);
             meshBuilder = new ChunkRenderer(voxelStorage);
@@ -82,6 +83,12 @@ namespace VoxelGame
             CursorState = CursorState.Grabbed;
 
             FPSCounter = new FPSCounter();
+        }
+
+        protected void loadBlocks(){
+            new Block(0, BlockModel.Air, (0, 0));
+            new Block(1, BlockModel.Cube, (1, 0));
+            new Block(2, BlockModel.Cube, (0, 1));
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

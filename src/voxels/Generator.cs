@@ -28,15 +28,17 @@ namespace VoxelGame.Voxels{
                     for (int y = 0; y < 256; y++){
                         //Console.WriteLine(height);
                         if (y < height) {
-                            chunk.SetVoxel(x, y, z, new Voxel(1,0));
+                            if (y < 30){
+                                chunk.SetVoxel(x, y, z, new Voxel(1, 0));
+                            } else {
+                                chunk.SetVoxel(x, y, z, new Voxel(2, 0));
+                            }
                         } else {
                             chunk.SetVoxel(x, y, z, new Voxel(0,0));
                         }
                     }
                 }
             }
-
-            chunk.SetVoxel(10, 17, 10, new Voxel(1,0));
 
             return chunk;
         }

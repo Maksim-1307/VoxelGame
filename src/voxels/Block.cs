@@ -21,6 +21,10 @@ namespace VoxelGame.Voxels
             if (!blocks.ContainsKey(id)) return blocks[0];
             return blocks[id];
         }
+
+        public (uint x, uint y) GetUV(){
+            return this.uvPos;
+        }
     }
 
     public enum BlockModel {
