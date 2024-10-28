@@ -30,7 +30,7 @@ namespace VoxelGame.Graphics {
             GL.BindVertexArray(0);
         }
 
-        private void loadBuffers(){
+        public void loadBuffers(){
             VAO = GL.GenVertexArray();
             GL.BindVertexArray(VAO);
 

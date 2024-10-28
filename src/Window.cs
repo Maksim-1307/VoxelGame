@@ -17,24 +17,6 @@ namespace VoxelGame
 
     public class Window : GameWindow
     {
-        private readonly float[] _vertices =
-        {
-             0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 
-            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f  
-        };
-
-        private readonly uint[] _indices =
-        {
-            0, 1, 3,
-            1, 2, 3
-        };
-
-        private int _EBO;
-        private int _VBO;
-        private int _VAO;
-
         private Camera _camera;
 
         private bool _firstMove = true;
@@ -51,7 +33,7 @@ namespace VoxelGame
         private ChunksController chunksController;
         private Canvas canvas;
 
-        Process proc = Process.GetCurrentProcess();
+        private Line testLine;
 
         // testing
         private Text _text;
@@ -79,7 +61,8 @@ namespace VoxelGame
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
             chunksController = new ChunksController(_camera, voxelStorage);
             canvas = new Canvas(_camera);
-            
+            testLine = new Line(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f));
+
             CursorState = CursorState.Grabbed;
 
             FPSCounter = new FPSCounter();
@@ -99,6 +82,7 @@ namespace VoxelGame
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GameObject.GameObjectsUpdate();
+            testLine.Draw(_camera);
 
             SwapBuffers();
 

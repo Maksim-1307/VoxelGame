@@ -72,6 +72,10 @@ namespace VoxelGame.Graphics
             return Matrix4.CreateOrthographic(1, 1 / AspectRatio, -1.0f, 1.0f);
         }
 
+        public Matrix4 GetViewFromNullMatrix(){
+            return Matrix4.LookAt(-Front, new Vector3(0,0,0), new Vector3(0,1,0));
+        }
+
         private void UpdateVectors()
         {
             _front.X = MathF.Cos(_pitch) * MathF.Cos(_yaw);
