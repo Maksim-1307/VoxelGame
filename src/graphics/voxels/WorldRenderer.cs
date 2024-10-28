@@ -31,8 +31,8 @@ namespace VoxelGame.Graphics{
         public WorldRenderer(VoxelStorage voxelStorage, Camera camera){
             _voxelStorage = voxelStorage;
             _camera = camera;
-            _texture = Texture.LoadFromFile("res/textures/texture.png");
-            _texture2 = Texture.LoadFromFile("res/textures/texture.png");
+            _texture = Texture.LoadFromFile("res/textures/atlas.png");
+            _texture2 = Texture.LoadFromFile("res/textures/atlas.png");
             _shader = new Shader("res/shaders/shader.vert", "res/shaders/shader.frag");
             _chunkRenderer = new ChunkRenderer(_voxelStorage);
             _renderThread  = new Thread(handleRenderQueue);

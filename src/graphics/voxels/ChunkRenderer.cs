@@ -9,6 +9,7 @@ namespace VoxelGame.Graphics{
         private List<float> vertices = new List<float>(1024);
         private List<uint> indices = new List<uint>(256);
         private uint indexOffset = 0;
+        const uint ATLAS_SIZE = 8;
 
         private uint verticesIndex = 0;
         private uint indicesIndex = 0;
@@ -91,50 +92,55 @@ namespace VoxelGame.Graphics{
 
         private void CubeModel(int x, int y, int z){
             bool [] OpenedFaces = OpenedAround(x, y, z);
+            // Block block = Block.getBlockByVoxelId(VoxelStorage.GetVoxel(x,y,z));
+            (uint x, uint y) blockFaceUV = (1,2); // from block
+            (float x, float y) uv = ((float)blockFaceUV.x / ATLAS_SIZE, (float)blockFaceUV.y / ATLAS_SIZE);
+            
             for (int face = 0; face < 6; face++){
                 if (OpenedFaces[face]){
                 switch (face) {
                     // X+
                     case 0:
-                        vertex(1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                        vertex(1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-                        vertex(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-                        vertex(1.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+                        // (uint x, uint y) uv = block.GetUv(face);
+                        vertex(1.0f, 0.0f, 0.0f, uv.x, uv.y);
+                        vertex(1.0f, 0.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
                         break;
                     // X-
                     case 1:
-                        vertex(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                        vertex(0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-                        vertex(0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-                        vertex(0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+                        vertex(0.0f, 0.0f, 0.0f, uv.x, uv.y);
+                        vertex(0.0f, 0.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(0.0f, 1.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(0.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
                         break;
                     // Y+
                     case 2:
-                        vertex(0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
-                        vertex(0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-                        vertex(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-                        vertex(1.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+                        vertex(0.0f, 1.0f, 0.0f, uv.x, uv.y);
+                        vertex(0.0f, 1.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
                         break;
                     // Y-
                     case 3:
-                        vertex(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                        vertex(0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-                        vertex(1.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-                        vertex(1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+                        vertex(0.0f, 0.0f, 0.0f, uv.x, uv.y);
+                        vertex(0.0f, 0.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 0.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 0.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
                         break;
                     // Z+
                     case 4:
-                        vertex(0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-                        vertex(0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-                        vertex(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-                        vertex(1.0f, 0.0f, 1.0f, 1.0f, 0.0f);
+                        vertex(0.0f, 0.0f, 1.0f, uv.x, uv.y);
+                        vertex(0.0f, 1.0f, 1.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 0.0f, 1.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
                         break;
                     // Z-
                     case 5:
-                        vertex(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                        vertex(0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-                        vertex(1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
-                        vertex(1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+                        vertex(0.0f, 0.0f, 0.0f, uv.x, uv.y);
+                        vertex(0.0f, 1.0f, 0.0f, uv.x, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 1.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y + 1.0f / ATLAS_SIZE);
+                        vertex(1.0f, 0.0f, 0.0f, uv.x + 1.0f / ATLAS_SIZE, uv.y);
                         break;
                 }
 

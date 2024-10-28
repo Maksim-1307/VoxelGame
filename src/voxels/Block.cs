@@ -6,6 +6,7 @@ namespace VoxelGame.Voxels
         public byte voxelId;
         public BlockModel blockModel;
         public (uint x, uint y) uvPos;
+        public bool [] openFaces = new bool [6];
 
         public Block(byte voxelId, BlockModel blockModel, (uint x, uint y) uvPos)
         {
