@@ -65,14 +65,15 @@ namespace VoxelGame.Graphics{
             _mesh.draw();
         }
         public void Update(string newText){
+            if (_text == newText) return;
             _text = newText;
             _mesh = getMesh();
         }
 
         public Mesh getMesh(){
             
-            vertices = [];
-            indices = [];
+            vertices.Clear();
+            indices.Clear();
             indexOffset = 0;
             offset = (0.0f, 0.0f);
             
