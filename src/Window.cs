@@ -34,6 +34,9 @@ namespace VoxelGame
         private Canvas canvas;
 
         private Line testLine;
+        private Line testLine2;
+        private Line testLine3;
+        private Shader _testshader;
 
         // testing
         private Text _text;
@@ -52,7 +55,6 @@ namespace VoxelGame
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            //GL.Ortho(left, right, bottom, top, -1.0, 1.0);
 
             loadBlocks();
             generator = new Generator();
@@ -61,7 +63,7 @@ namespace VoxelGame
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
             chunksController = new ChunksController(_camera, voxelStorage);
             canvas = new Canvas(_camera);
-            testLine = new Line(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f));
+            new AxisLines();
 
             CursorState = CursorState.Grabbed;
 
@@ -82,7 +84,6 @@ namespace VoxelGame
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GameObject.GameObjectsUpdate();
-            testLine.Draw(_camera);
 
             SwapBuffers();
 
