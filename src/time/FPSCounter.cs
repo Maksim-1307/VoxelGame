@@ -22,10 +22,9 @@ namespace VoxelGame.Time{
 
         public override void Update(){
             frames++;
-
             if (stopwatch.Elapsed.TotalSeconds >= 1.0f)
             {
-                fps = frames;//Console.WriteLine(frames);
+                fps = frames;
                 fpsText.Update("fps " + fps);
                 frames = 0;
                 stopwatch.Restart();

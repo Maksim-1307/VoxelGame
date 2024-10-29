@@ -17,6 +17,11 @@ namespace VoxelGame.Graphics {
             this.vertices = vertices;
             this.indices = indices;
         }
+        ~Mesh(){
+            BuffersCleaner.AddToQueue(BufferType.VertexArray, this.VAO);
+            BuffersCleaner.AddToQueue(BufferType.VertexBuffer, this.VBO);
+            BuffersCleaner.AddToQueue(BufferType.VertexBuffer, this.EBO);
+        }
 
         public void Update(float[] newVertices, uint[] newIndices)
         {

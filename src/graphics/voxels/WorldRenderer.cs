@@ -43,32 +43,15 @@ namespace VoxelGame.Graphics{
         }
 
         public void renderChunks((int x, int y) centerChunkPos){
-            //Console.WriteLine("Count of chunks: " + _voxelStorage.chunks.Count);
-            // (int x, int z)[] chunks;
-            // lock ()
-            // {
-            //     chunks = _voxelStorage.chunks.Keys.ToArray();
-            // }
-            // _dict.Keys.ElementAt(5)
-            // for (int i = 0; i < _voxelStorage.chunks.Count; i++){
-            //     (int x, int z) chunkPos = _voxelStorage.chunks.Keys.ElementAt(i);
-            // // }
-            //lock(chunks){
             foreach ((int x, int z) chunkPos in _voxelStorage.chunks.Keys.ToArray())
             {
                 int x = chunkPos.Item1 - centerChunkPos.Item1;
                 int y = chunkPos.Item2 - centerChunkPos.Item2;
                 if (x * x + y * y <= _renderDistance * _renderDistance)
                 {
-
                     renderChunk(chunkPos.Item1, chunkPos.Item2);
-                    // if (_renderThread == null) {
-                    //     _renderThread = new Thread(() => ;
-                    //     _renderThread.Start();
-                    // }
                 }
             }
-            //}
         }
 
         public void renderChunk(int chunkX, int chunkZ){
@@ -97,13 +80,8 @@ namespace VoxelGame.Graphics{
 
             if (!chunksMeshes.ContainsKey(key))
             {
-                // add render queue here
-                // render queue add (chunkX, chunkZ)
-                //Console.WriteLine(chunksMeshes.Count + ", " + _renderQueue.Count);
                 if (!_renderQueue.Contains(key)) _renderQueue.Enqueue(key);
                 return null;
-                // return (chunk mesh will be added in chunksMeshes in a thread)
-                //chunksMeshes[key] = _chunkRenderer.BuildMeshOfChunkAt(chunkX, chunkZ);
             } else {
                 return chunksMeshes[key];
             }
@@ -119,32 +97,9 @@ namespace VoxelGame.Graphics{
 
             while (_renderQueue.Count > 0){
                 (int x, int z) chunkPos = _renderQueue.Dequeue();
-                //Console.WriteLine("just after");
-                //Mesh mesh = new Mesh([],[]);
-                chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);
-                //renderChunk(chunkPos.x, chunkPos.z);
-                
+                chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);                
             }
-            
             return;
-            // foreach ((int x, int z) chunkPos in _renderQueue){
-            //     renderChunk(chunkPos.x, chunkPos.z);
-            // }
         }
-
-        /*
-        function toggleRenderQueueHandling(){
-            if (queue is not empty and renderThread is not running){
-                run render thread (render function)
-            }
-        }
-        function renderFunction(){
-            while (queue is not empty){
-                chunksMeshes[queueElem] = _chunkRenderer.BuildMeshOfChunkAt(queueElem);
-            }
-        }
-        */
-
-
     }
 }

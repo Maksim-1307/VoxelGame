@@ -33,14 +33,6 @@ namespace VoxelGame
         private ChunksController chunksController;
         private Canvas canvas;
 
-        private Line testLine;
-        private Line testLine2;
-        private Line testLine3;
-        private Shader _testshader;
-
-        // testing
-        private Text _text;
-
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {}
@@ -97,6 +89,12 @@ namespace VoxelGame
             {
                 return;
             }
+
+            Mesh mesh = new Mesh([],[]);
+            mesh.loadBuffers();
+
+            // cleaning buffers of deleted objects
+            BuffersCleaner.Clean();
 
             var input = KeyboardState;
 
