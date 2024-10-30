@@ -6,16 +6,23 @@ namespace VoxelGame.Voxels
         public byte voxelId;
         public BlockModel blockModel;
         public (uint x, uint y) [] UVs;
-        public bool [] openFaces = new bool [6];
+        public bool [] OpenedFaces = [false, false, false, false, false, false]; 
 
         public Block(byte voxelId, BlockModel blockModel, (uint x, uint y)[] UVs)
         {
             this.voxelId = voxelId;
             this.blockModel = blockModel;
             this.UVs = UVs;
+            this.OpenedFaces = getOpenedFaces(blockModel);
             if (UVs.Count() == 0) throw new ArgumentException("Block must have at least one texture UV");
 
             blocks.Add(voxelId, this);
+        }
+
+        private static bool [] getOpenedFaces(BlockModel blockModel){
+            if (blockModel == BlockModel.Air) return [true, true, true, true, true, true];
+            if (blockModel == BlockModel.Foliage) return [true, true, true, true, true, true];
+            return [false, false, false, false, false, false];
         }
 
         public static Block GetBlockByVoxelId(byte id){
@@ -47,6 +54,6 @@ namespace VoxelGame.Voxels
     }
 
     public enum BlockModel {
-        Air, Cube, XSprite, Stairs, HalfBlock, Fluid
+        Air, Cube, XSprite, Stairs, HalfBlock, Fluid, Foliage
     }
 }

@@ -14,7 +14,6 @@ using System.Diagnostics;
 
 namespace VoxelGame
 {
-
     public class Window : GameWindow
     {
         private Camera _camera;
@@ -43,7 +42,7 @@ namespace VoxelGame
 
             GameObject.GameObjectsStart();
 
-            GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            GL.ClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -66,6 +65,7 @@ namespace VoxelGame
             new Block(0, BlockModel.Air, [(0, 0)]);
             new Block(1, BlockModel.Cube, [(1, 0)]);
             new Block(2, BlockModel.Cube, [(1, 1), (0, 1), (0, 0)]);
+            new Block(3, BlockModel.Foliage, [(2, 2)]);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

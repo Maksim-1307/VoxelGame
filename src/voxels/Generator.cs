@@ -40,7 +40,9 @@ namespace VoxelGame.Voxels{
                 }
             }
 
-            chunk.SetVoxel(10, 30, 10, new Voxel(2, 0));
+            chunk.SetVoxel(10, 30, 10, new Voxel(3, 0));
+            chunk.SetVoxel(11, 30, 10, new Voxel(3, 0));
+            chunk.SetVoxel(10, 31, 10, new Voxel(3, 0));
 
             return chunk;
         }

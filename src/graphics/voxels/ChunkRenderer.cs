@@ -48,13 +48,28 @@ namespace VoxelGame.Graphics{
 
         private bool[] OpenedAround(int x, int y, int z) {
             bool [] opened = new bool[6];
-            opened[0] = VoxelStorage.GetVoxel(x+1, y, z).Id == 0;
-            opened[1] = VoxelStorage.GetVoxel(x-1, y, z).Id == 0;
-            opened[2] = VoxelStorage.GetVoxel(x, y+1, z).Id == 0;
-            opened[3] = VoxelStorage.GetVoxel(x, y-1, z).Id == 0;
-            opened[4] = VoxelStorage.GetVoxel(x, y, z+1).Id == 0;
-            opened[5] = VoxelStorage.GetVoxel(x, y, z-1).Id == 0;
+            opened[0] = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x + 1, y, z).Id).OpenedFaces[adjacent(0)];
+            opened[1] = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x - 1, y, z).Id).OpenedFaces[adjacent(1)];
+            opened[2] = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x, y + 1, z).Id).OpenedFaces[adjacent(2)];
+            opened[3] = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x, y - 1, z).Id).OpenedFaces[adjacent(3)];
+            opened[4] = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x, y, z + 1).Id).OpenedFaces[adjacent(4)];
+            opened[5] = Block.GetBlockByVoxelId(VoxelStorage.GetVoxel(x, y, z - 1).Id).OpenedFaces[adjacent(5)];
+
+            // opened[0] = VoxelStorage.GetVoxel(x+1, y, z).Id == 0;
+            // opened[1] = VoxelStorage.GetVoxel(x-1, y, z).Id == 0;
+            // opened[2] = VoxelStorage.GetVoxel(x, y+1, z).Id == 0;
+            // opened[3] = VoxelStorage.GetVoxel(x, y-1, z).Id == 0;
+            // opened[4] = VoxelStorage.GetVoxel(x, y, z+1).Id == 0;
+            // opened[5] = VoxelStorage.GetVoxel(x, y, z-1).Id == 0;
             return opened;
+        }
+
+        // returns number of face in same axis but reverse direction
+        // for example: from X+ face to X- face, from Z+ face to Z- face
+        private byte adjacent(byte face) 
+        {
+            if (face % 2 == 0) return (byte)(face + 1);
+            return (byte)(face - 1);
         }
 
         private void vertex (float x, float y, float z, float uvx, float uvy) {

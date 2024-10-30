@@ -43,15 +43,12 @@ namespace VoxelGame.World{
             if (newChunkPos != chunkPos) {
                 chunkPos = newChunkPos;
                 return true;
-            }// } else {
-            //     Console.WriteLine(newChunkPos + " = " + chunkPos);
-            // }
+            }
             return false;
         }
 
         public void SetRenderDistance(uint newDistance) {
             _renderDistance = newDistance;
-            //LoadChunks();
         }
 
         private void LoadChunks() {
