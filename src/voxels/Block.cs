@@ -1,3 +1,7 @@
+//using System.Numerics;
+using VoxelGame.Logic;
+using OpenTK.Mathematics;
+
 namespace VoxelGame.Voxels
 {
     public class Block
@@ -50,6 +54,13 @@ namespace VoxelGame.Voxels
                     return UVs[(face + 2) % 6];
             }
             return UVs[0];
+        }
+
+        public static AABB [] GetAABBs (Voxel vox){
+            Block block = GetBlockByVoxelId(vox.Id);
+            if (block.blockModel == BlockModel.Air) return [];
+            if (block.blockModel == BlockModel.Foliage) return [];
+            return [new AABB(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f, 1.0f, 1.0f))];
         }
     }
 

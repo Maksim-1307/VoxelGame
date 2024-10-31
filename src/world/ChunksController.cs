@@ -3,6 +3,7 @@ using VoxelGame.Graphics;
 using VoxelGame.Voxels;
 using System.Threading;
 using OpenTK.Mathematics;
+using System;
 
 namespace VoxelGame.World{
     public class ChunksController : GameObject{
@@ -58,6 +59,21 @@ namespace VoxelGame.World{
 
         private void LoadChunk(int x, int z) {
             _voxelStorage.GetOrCreateChunk(x, z);
+        }
+
+        public bool IsObstableAt (float x, float y, float z) {
+            int vx = (int)Math.Floor(x);
+            int vy = (int)Math.Floor(y);
+            int vz = (int)Math.Floor(z);
+            float ix = x - vx;
+            float iy = y - vy;
+            float iz = z - vz;
+            Voxel vox = _voxelStorage.GetVoxel(vx, vy, vz);
+            AABB[] AABBs = Block.GetAABBs(vox);
+            foreach (AABB hitbox in AABBs){
+                if (hitbox.contains(new Vector3(ix, iy, iz))) return true;
+            }
+            return false;
         }
 
     }

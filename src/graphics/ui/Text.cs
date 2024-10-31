@@ -58,11 +58,13 @@ namespace VoxelGame.Graphics{
             //GL.BlendFuncSeparate(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha, BlendingFactor.One);
 
             //GL.BlendFunc();
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.One);
             _shader.SetMatrix4("transform", Matrix4.CreateTranslation(-0.5f, 0.3f, 0.0f));
             _shader.SetMatrix4("ortho", camera.GetOrthoMatrix());
             _fontTexture.Use(TextureUnit.Texture0);
             _shader.Use();
             _mesh.draw();
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
         public void Update(string newText){
             // _mesh = new Mesh([],[]);

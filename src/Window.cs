@@ -32,6 +32,8 @@ namespace VoxelGame
         private ChunksController chunksController;
         private Canvas canvas;
 
+        private Text _text;
+
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {}
@@ -42,7 +44,7 @@ namespace VoxelGame
 
             GameObject.GameObjectsStart();
 
-            GL.ClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            GL.ClearColor(0.67f, 0.84f, 0.9f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -55,6 +57,7 @@ namespace VoxelGame
             chunksController = new ChunksController(_camera, voxelStorage);
             canvas = new Canvas(_camera);
             new AxisLines();
+            _text = new Text("");
 
             CursorState = CursorState.Grabbed;
 
@@ -101,6 +104,12 @@ namespace VoxelGame
             if (input.IsKeyDown(Keys.Escape))
             {
                 Close();
+            }
+
+            if (chunksController.IsObstableAt(_camera.Position.X, _camera.Position.Y, _camera.Position.Z)) {
+                _text.Update("Obstable");
+            } else {
+                _text.Update("Free");
             }
 
             const float cameraSpeed = 15.5f;
