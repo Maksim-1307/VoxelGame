@@ -9,6 +9,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Input;
 using System.Threading;
 using System.Diagnostics;
 
@@ -100,17 +101,27 @@ namespace VoxelGame
             BuffersCleaner.Clean();
 
             var input = KeyboardState;
+            var mouse = MouseState;
+
+            if (mouse.IsButtonDown(MouseButton.Right))
+            {
+                if (chunksController.RayCast(_camera.Position, _camera.Front, 10.0f) != null){
+                    Voxel vox = (Voxel)chunksController.RayCast(_camera.Position, _camera.Front, 10.0f);
+                    _text.Update("the voxel id is " + vox.Id);
+                }
+            }
+
 
             if (input.IsKeyDown(Keys.Escape))
             {
                 Close();
             }
 
-            if (chunksController.IsObstableAt(_camera.Position.X, _camera.Position.Y, _camera.Position.Z)) {
-                _text.Update("Obstable");
-            } else {
-                _text.Update("Free");
-            }
+            // if (chunksController.IsObstableAt(new Vector3(_camera.Position.X, _camera.Position.Y, _camera.Position.Z))) {
+            //     _text.Update("Obstable");
+            // } else {
+            //     _text.Update("Free");
+            // }
 
             const float cameraSpeed = 15.5f;
             const float sensitivity = 0.2f;
@@ -140,9 +151,6 @@ namespace VoxelGame
             {
                 _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
             }
-
-
-            var mouse = MouseState;
 
             if (_firstMove) 
             {

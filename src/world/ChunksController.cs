@@ -4,6 +4,7 @@ using VoxelGame.Voxels;
 using System.Threading;
 using OpenTK.Mathematics;
 using System;
+using System.Collections.Concurrent;
 
 namespace VoxelGame.World{
     public class ChunksController : GameObject{
@@ -61,7 +62,10 @@ namespace VoxelGame.World{
             _voxelStorage.GetOrCreateChunk(x, z);
         }
 
-        public bool IsObstableAt (float x, float y, float z) {
+        public bool IsObstableAt (Vector3 pos) {
+            float x = pos.X;
+            float y = pos.Y;
+            float z = pos.Z;
             int vx = (int)Math.Floor(x);
             int vy = (int)Math.Floor(y);
             int vz = (int)Math.Floor(z);
@@ -74,6 +78,21 @@ namespace VoxelGame.World{
                 if (hitbox.contains(new Vector3(ix, iy, iz))) return true;
             }
             return false;
+        }
+
+        public Voxel? RayCast(Vector3 pos, Vector3 dir, float maxDist){
+            Vector3 step = 0.1f * dir;
+            Vector3 current = pos;
+            while ((pos - current).Length < maxDist) {
+                current += step;
+                if (IsObstableAt(current)) {
+                    int x = (int)MathF.Floor(current.X);
+                    int y = (int)MathF.Floor(current.Y);
+                    int z = (int)MathF.Floor(current.Z);
+                    return _voxelStorage.GetVoxel(x, y, z);
+                }
+            }
+            return null;
         }
 
     }

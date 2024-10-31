@@ -25,6 +25,7 @@ namespace VoxelGame.Time{
             if (stopwatch.Elapsed.TotalSeconds >= 1.0f)
             {
                 fps = frames;
+                Console.WriteLine(fps);
                 //fpsText.Update("fps " + fps);
                 frames = 0;
                 stopwatch.Restart();
