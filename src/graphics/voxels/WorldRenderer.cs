@@ -101,5 +101,9 @@ namespace VoxelGame.Graphics{
             }
             return;
         }
+
+        public void UpdateChunk((int x, int z) chunkPos) {
+            _renderQueue.Enqueue(chunkPos);
+        }
     }
 }

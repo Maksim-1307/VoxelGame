@@ -106,8 +106,8 @@ namespace VoxelGame
             if (mouse.IsButtonDown(MouseButton.Right))
             {
                 if (chunksController.RayCast(_camera.Position, _camera.Front, 10.0f) != null){
-                    Voxel vox = (Voxel)chunksController.RayCast(_camera.Position, _camera.Front, 10.0f);
-                    _text.Update("the voxel id is " + vox.Id);
+                    chunksController.RayCast(_camera.Position, _camera.Front, 10.0f);
+                    ///_text.Update("the voxel id is " + vox.Id);
                 }
             }
 

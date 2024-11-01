@@ -89,10 +89,17 @@ namespace VoxelGame.World{
                     int x = (int)MathF.Floor(current.X);
                     int y = (int)MathF.Floor(current.Y);
                     int z = (int)MathF.Floor(current.Z);
+                    SetVoxel(x, y, z, new Voxel(0,0));
                     return _voxelStorage.GetVoxel(x, y, z);
                 }
             }
             return null;
+        }
+
+
+        public void SetVoxel(int x, int y, int z, Voxel vox){
+            _voxelStorage.SetVoxel(x, y, z, vox);
+            _worldRenderer.UpdateChunk(_voxelStorage.GetChunkPos(x, y, z));
         }
 
     }

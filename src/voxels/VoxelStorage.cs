@@ -59,6 +59,14 @@ namespace VoxelGame.Voxels{
             return chunk.GetVoxel(blockX, y, blockZ);
         }
 
+        public (int x, int z) GetChunkPos(int x, int y, int z)
+        {
+            int chunkX = (int)MathF.Floor((float)x / 16);
+            int chunkZ = (int)MathF.Floor((float)z / 16);
+
+            return (chunkX, chunkZ);
+        }
+
         public void SetVoxel(int x, int y, int z, Voxel voxel)
         {
             int chunkX = x / 16;
@@ -66,6 +74,38 @@ namespace VoxelGame.Voxels{
 
             int blockX = x % 16;
             int blockZ = z % 16;
+
+            // transformations for negative directions
+            if (chunkX == 0 && x < 0)
+            {
+                chunkX = -1;
+                blockX += 16;
+            }
+            else if (chunkX < 0)
+            {
+                blockX += 16;
+                chunkX -= 1;
+                if (blockX == 16)
+                {
+                    blockX = 0;
+                    chunkX += 1;
+                }
+            }
+            if (chunkZ == 0 && z < 0)
+            {
+                chunkZ = -1;
+                blockZ += 16;
+            }
+            else if (chunkZ < 0)
+            {
+                blockZ += 16;
+                chunkZ -= 1;
+                if (blockZ == 16)
+                {
+                    blockZ = 0;
+                    chunkZ += 1;
+                }
+            }
 
             Chunk chunk = GetOrCreateChunk(chunkX, chunkZ);
             chunk.SetVoxel(blockX, y, blockZ, voxel);
