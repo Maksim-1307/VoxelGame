@@ -5,8 +5,8 @@ using OpenTK.Graphics.OpenGL4;
 namespace VoxelGame.Graphics
 {
     public class BuffersCleaner {
-        private static Queue<int> VertexArrays = new Queue<int>();
-        private static Queue<int> VertexBuffers = new Queue<int>();
+        private static ConcurrentQueue<int> VertexArrays = new ConcurrentQueue<int>();
+        private static ConcurrentQueue<int> VertexBuffers = new ConcurrentQueue<int>();
         public static void AddToQueue(BufferType type, int buffer){
             switch (type) {
                 case BufferType.VertexArray:
@@ -22,13 +22,17 @@ namespace VoxelGame.Graphics
         public static void Clean(){
             while (VertexArrays.Count > 0)
             {
-                int buff = VertexArrays.Dequeue();
-                GL.DeleteVertexArray(buff);
+                int buff;
+                if (VertexArrays.TryDequeue(out buff)){
+                    GL.DeleteVertexArray(buff);
+                }
             }
             while (VertexBuffers.Count > 0)
             {
-                int buff = VertexBuffers.Dequeue();
-                GL.DeleteBuffer(buff);
+                int buff;
+                if(VertexBuffers.TryDequeue(out buff)){
+                    GL.DeleteBuffer(buff);
+                }
             }
         }
     }

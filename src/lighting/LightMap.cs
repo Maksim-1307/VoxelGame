@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using VoxelGame.Voxels;
+using System.Runtime.CompilerServices;
 
 namespace VoxelGame.Lighting
 {
@@ -14,6 +15,22 @@ namespace VoxelGame.Lighting
         public LightMap(VoxelStorage voxelStorage)
         {
             this.voxelStorage = voxelStorage;
+        }
+
+        public void solveLightAt(int x, int y, int z, byte value){
+
+            if (voxelStorage.GetVoxel(x, y, z).Id != 0) return;
+            byte light = GetLight(x, y, z).Value;
+            if (light >= value) return;
+
+            SetLight(x, y, z, new Light(value));
+
+            SetLight(x-1, y, z, new Light((byte)(value-1)));
+            SetLight(x+1, y, z, new Light((byte)(value-1)));
+            SetLight(x, y-1, z, new Light((byte)(value-1)));
+            SetLight(x, y+1, z, new Light((byte)(value-1)));
+            SetLight(x, y, z-1, new Light((byte)(value-1)));
+            SetLight(x, y, z+1, new Light((byte)(value-1)));
         }
 
         //testing 
@@ -37,11 +54,21 @@ namespace VoxelGame.Lighting
                         } else {
                             chunkLights.SetLight(x, y, z, new Light(0));
                         }
+                        // solvingQueue.Enqueue((chunkAbsPosX + x, y, chunkAbsPosZ + z));
                     }
                 }
             }
 
             return chunkLights;
+        }
+
+        public void UpdateChunkLights(int chunkX, int chunkZ)
+        {
+            var key = (chunkX, chunkZ);
+            if (lightMap.ContainsKey(key))
+            {
+                lightMap[key] = generateLights(chunkX, chunkZ);
+            }
         }
 
         public ChunkLightMap GetOrCreateChunkLightMap(int chunkX, int chunkZ)

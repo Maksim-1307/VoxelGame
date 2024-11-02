@@ -104,6 +104,7 @@ namespace VoxelGame.World{
             _voxelStorage.SetVoxel(x, y, z, vox);
             (int x, int z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
             _worldRenderer.UpdateChunk(chunkPos);
+            _lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
 
             _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
             _worldRenderer.UpdateChunk((chunkPos.x - 1, chunkPos.z));
