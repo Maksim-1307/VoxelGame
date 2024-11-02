@@ -1,6 +1,7 @@
 using VoxelGame.Logic;
 using VoxelGame.Graphics;
 using VoxelGame.Voxels;
+using VoxelGame.Lighting;
 using System.Threading;
 using OpenTK.Mathematics;
 using System;
@@ -11,8 +12,9 @@ namespace VoxelGame.World{
 
         private Camera _camera;
         private VoxelStorage _voxelStorage;
+        private LightMap _lightMap;
         private uint _renderDistance = 5;
-        private ChunkRenderer _meshBuilder;
+        //private ChunkRenderer _meshBuilder;
         private WorldRenderer _worldRenderer;
 
         private Thread renderingThread;
@@ -21,11 +23,12 @@ namespace VoxelGame.World{
 
         private (int, int) chunkPos;
 
-        public ChunksController(Camera Camera, VoxelStorage VoxelStorage){
+        public ChunksController(Camera Camera, VoxelStorage VoxelStorage, LightMap lightMap){
             _camera = Camera;
             _voxelStorage = VoxelStorage;
-            _meshBuilder = new ChunkRenderer(_voxelStorage);
-            _worldRenderer = new WorldRenderer(_voxelStorage, _camera);
+            _lightMap = lightMap;
+            //_meshBuilder = new ChunkRenderer(_voxelStorage);
+            _worldRenderer = new WorldRenderer(_voxelStorage, _lightMap, _camera);
             LoadChunk(0,0);
         }
 
@@ -99,7 +102,31 @@ namespace VoxelGame.World{
 
         public void SetVoxel(int x, int y, int z, Voxel vox){
             _voxelStorage.SetVoxel(x, y, z, vox);
-            _worldRenderer.UpdateChunk(_voxelStorage.GetChunkPos(x, y, z));
+            (int x, int z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
+            _worldRenderer.UpdateChunk(chunkPos);
+
+            _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
+            _worldRenderer.UpdateChunk((chunkPos.x - 1, chunkPos.z));
+            _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z + 1));
+            _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z - 1));
+            // if (x % 16 == 0) {
+            //     if (x > 0) {
+            //         _worldRenderer.UpdateChunk((chunkPos.x-1, chunkPos.z));
+            //     } else {
+            //         _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
+            //     }
+            // }
+            // if (z % 16 == 0)
+            // {
+            //     if (z > 0)
+            //     {
+            //         _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z - 1));
+            //     }
+            //     else
+            //     {
+            //         _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z + 1));
+            //     }
+            // }
         }
 
     }

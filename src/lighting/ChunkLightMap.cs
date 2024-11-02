@@ -1,25 +1,27 @@
 using VoxelGame.Graphics;
 using VoxelGame.Logic;
 
-namespace VoxelGame.Voxels{
-    public class Chunk 
+namespace VoxelGame.Lighting
+{
+    public class ChunkLightMap 
     {
         private const int Width = 16;
         private const int Height = 256;
         private const int Depth = 16;
 
-        private Voxel[,,] blocks;
+        private Light[,,] lights;
 
-        public Chunk()
+        public ChunkLightMap()
         {
-            blocks = new Voxel[Width, Height, Depth];
+            lights = new Light[Width, Height, Depth];
         }
 
-        public void SetVoxel(int x, int y, int z, Voxel voxel)
+
+        public void SetLight(int x, int y, int z, Light light)
         {
             if (IsInBounds(x, y, z))
             {
-                blocks[x, y, z] = voxel;
+                lights[x, y, z] = light;
             }
             else
             {
@@ -27,15 +29,15 @@ namespace VoxelGame.Voxels{
             }
         }
 
-        public Voxel GetVoxel(int x, int y, int z)
+        public Light GetLight(int x, int y, int z)
         {
             if (IsInBounds(x, y, z))
             {
-                return blocks[x, y, z]; 
+                return lights[x, y, z];
             }
             else
             {
-                return new Voxel(0,0);
+                return new Light(0);
                 //throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
             }
         }

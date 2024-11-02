@@ -12,6 +12,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Input;
 using System.Threading;
 using System.Diagnostics;
+using VoxelGame.Lighting;
 
 namespace VoxelGame
 {
@@ -29,6 +30,7 @@ namespace VoxelGame
 
         private Generator generator;
         private VoxelStorage voxelStorage;
+        private LightMap lightMap = new LightMap();
         private ChunkRenderer meshBuilder;
         private ChunksController chunksController;
         private Canvas canvas;
@@ -53,9 +55,10 @@ namespace VoxelGame
             loadBlocks();
             generator = new Generator();
             voxelStorage = new VoxelStorage(generator);
-            meshBuilder = new ChunkRenderer(voxelStorage);
+            lightMap = new LightMap();
+            meshBuilder = new ChunkRenderer(voxelStorage, lightMap);
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
-            chunksController = new ChunksController(_camera, voxelStorage);
+            chunksController = new ChunksController(_camera, voxelStorage, lightMap);
             canvas = new Canvas(_camera);
             new AxisLines();
             _text = new Text("");

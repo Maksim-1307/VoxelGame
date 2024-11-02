@@ -1,10 +1,12 @@
 using VoxelGame.Voxels;
 using OpenTK.Mathematics;
+using VoxelGame.Lighting;
 
 namespace VoxelGame.Graphics{
     public class ChunkRenderer{
 
         private VoxelStorage VoxelStorage;
+        private LightMap LightMap;
 
         private List<float> vertices = new List<float>(1024);
         private List<uint> indices = new List<uint>(256);
@@ -14,14 +16,15 @@ namespace VoxelGame.Graphics{
         private uint verticesIndex = 0;
         private uint indicesIndex = 0;
 
-        private const uint VERTEX_SIZE = 5; // x y z tx ty
+        private const uint VERTEX_SIZE = 8; // x y z tx ty r g b
 
         private int _x;
         private int _y;
         private int _z;
 
-        public ChunkRenderer (VoxelStorage VoxelStorage){
+        public ChunkRenderer (VoxelStorage VoxelStorage, LightMap LightMap){
             this.VoxelStorage = VoxelStorage;
+            this.LightMap = LightMap;
         }
 
         public Mesh BuildMeshOfChunkAt(int chunkX, int chunkZ){
@@ -73,7 +76,15 @@ namespace VoxelGame.Graphics{
         }
 
         private void vertex (float x, float y, float z, float uvx, float uvy) {
-            vertices.AddRange([ _x + x,  _y + y, _z + z,  uvx,  uvy]);
+            (float r, float g, float b) color;
+            float lihgt = (float)this.LightMap.GetLight(_x, _y, _z).Value / 8.0f;
+            color = (lihgt, lihgt, lihgt);
+            // if ((x + z + y) % 2 == 0) {
+            //     color = (1.0f, 0.0f, 0.0f);
+            // } else {
+            //     color = (0.0f, 0.0f, 1.0f);
+            // }
+            vertices.AddRange([ _x + x,  _y + y, _z + z,  uvx,  uvy, color.r, color.g, color.b]);
         }
 
         private void index(uint a, uint b, uint c, uint d, uint e, uint f) {

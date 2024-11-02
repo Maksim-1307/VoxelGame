@@ -9,6 +9,7 @@ using StbImageSharp;
 using OpenTK.Mathematics;
 using VoxelGame.Voxels;
 using System.Collections.Generic;
+using VoxelGame.Lighting;
 
 namespace VoxelGame.Graphics{
     public class WorldRenderer{
@@ -16,6 +17,7 @@ namespace VoxelGame.Graphics{
         public Dictionary<(int x, int z), Mesh> chunksMeshes = new Dictionary<(int, int), Mesh>();
 
         private VoxelStorage _voxelStorage;
+        private LightMap _lightMap;
         private Shader _shader;
         private Texture _texture;
         private Texture _texture2;
@@ -28,13 +30,14 @@ namespace VoxelGame.Graphics{
 
         public static uint _renderDistance = 6;
 
-        public WorldRenderer(VoxelStorage voxelStorage, Camera camera){
+        public WorldRenderer(VoxelStorage voxelStorage, LightMap lightMap, Camera camera){
             _voxelStorage = voxelStorage;
+            _lightMap = lightMap;
             _camera = camera;
             _texture = Texture.LoadFromFile("res/textures/atlas.png");
             _texture2 = Texture.LoadFromFile("res/textures/atlas.png");
             _shader = new Shader("res/shaders/shader.vert", "res/shaders/shader.frag");
-            _chunkRenderer = new ChunkRenderer(_voxelStorage);
+            _chunkRenderer = new ChunkRenderer(_voxelStorage, _lightMap);
             _renderThread  = new Thread(handleRenderQueue);
         }
 
