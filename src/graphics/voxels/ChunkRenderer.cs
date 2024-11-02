@@ -77,27 +77,33 @@ namespace VoxelGame.Graphics{
         }
 
         private float calculateLight(){
+            float light = 0.0f;
+            float faceFactor = 0.2f;
+            float [] faceDarkening = [0.2f, 0.7f, 0.0f, 0.8f, 0.3f, 0.5f];
             switch(_face){
                 case 0:
-                    return  1.0f - (float)(this.LightMap.GetLight(_x + 1, _y, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.LightMap.GetLight(_x + 1, _y, _z).Value + 3) / 11.0f;
                     break;
                 case 1:
-                    return 1.0f - (float)(this.LightMap.GetLight(_x - 1, _y, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.LightMap.GetLight(_x - 1, _y, _z).Value + 3) / 11.0f;
                     break;
                 case 2:
-                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y + 1, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y + 1, _z).Value + 3) / 11.0f;
                     break;
                 case 3:
-                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y - 1, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y - 1, _z).Value + 3) / 11.0f;
                     break;
                 case 4:
-                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z + 1).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z + 1).Value + 3) / 11.0f;
                     break;
                 case 5:
-                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z - 1).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z - 1).Value + 3) / 11.0f;
                     break;
             }
-            return 0.0f;
+            light = light + faceDarkening[_face] * faceFactor;
+            if (light < 0.0f) light = 0.0f;
+            if (light > 1.0f) light = 1.0f;
+            return light;
         }
 
         private void vertex (float x, float y, float z, float uvx, float uvy) {
