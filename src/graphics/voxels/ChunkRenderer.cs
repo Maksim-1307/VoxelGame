@@ -21,6 +21,7 @@ namespace VoxelGame.Graphics{
         private int _x;
         private int _y;
         private int _z;
+        private int _face;
 
         public ChunkRenderer (VoxelStorage VoxelStorage, LightMap LightMap){
             this.VoxelStorage = VoxelStorage;
@@ -75,16 +76,33 @@ namespace VoxelGame.Graphics{
             return (byte)(face - 1);
         }
 
+        private float calculateLight(){
+            switch(_face){
+                case 0:
+                    return  1.0f - (float)(this.LightMap.GetLight(_x + 1, _y, _z).Value + 3) / 11.0f;
+                    break;
+                case 1:
+                    return 1.0f - (float)(this.LightMap.GetLight(_x - 1, _y, _z).Value + 3) / 11.0f;
+                    break;
+                case 2:
+                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y + 1, _z).Value + 3) / 11.0f;
+                    break;
+                case 3:
+                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y - 1, _z).Value + 3) / 11.0f;
+                    break;
+                case 4:
+                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z + 1).Value + 3) / 11.0f;
+                    break;
+                case 5:
+                    return 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z - 1).Value + 3) / 11.0f;
+                    break;
+            }
+            return 0.0f;
+        }
+
         private void vertex (float x, float y, float z, float uvx, float uvy) {
-            (float r, float g, float b) color;
-            float lihgt = 1.0f - (float)(this.LightMap.GetLight((int)(_x + x), (int)(_y + y), (int)(_z + z)).Value + 6 + this.LightMap.GetLight(_x, _y, _z).Value + 3) / 22.0f;
-            color = (lihgt, lihgt, lihgt);
-            // if ((x + z + y) % 2 == 0) {
-            //     color = (1.0f, 0.0f, 0.0f);
-            // } else {
-            //     color = (0.0f, 0.0f, 1.0f);
-            // }
-            vertices.AddRange([ _x + x,  _y + y, _z + z,  uvx,  uvy, color.r, color.g, color.b]);
+            float light = calculateLight();
+            vertices.AddRange([ _x + x,  _y + y, _z + z,  uvx,  uvy, light, light, light]);
         }
 
         private void index(uint a, uint b, uint c, uint d, uint e, uint f) {
@@ -124,6 +142,7 @@ namespace VoxelGame.Graphics{
                 if (OpenedFaces[face]){
                 (uint x, uint y) blockFaceUV = block.GetUV((byte)face);
                 (float x, float y) uv = ((float)blockFaceUV.x / ATLAS_SIZE, (float)blockFaceUV.y / ATLAS_SIZE);
+                _face = face;
                 switch (face) {
                     // X+
                     case 0:

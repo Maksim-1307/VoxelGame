@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using VoxelGame.Voxels;
 
 namespace VoxelGame.Lighting
 {
@@ -8,10 +9,11 @@ namespace VoxelGame.Lighting
     public class LightMap
     {
         public ConcurrentDictionary<(int x, int z), ChunkLightMap> lightMap = new ConcurrentDictionary<(int, int), ChunkLightMap>();
+        private VoxelStorage voxelStorage;
 
-        public LightMap()
+        public LightMap(VoxelStorage voxelStorage)
         {
-
+            this.voxelStorage = voxelStorage;
         }
 
         //testing 
@@ -26,12 +28,14 @@ namespace VoxelGame.Lighting
             {
                 for (int z = 0; z < 16; z++)
                 {
-                    for (int y = 0; y < 256; y++)
+                    bool flag = true;
+                    for (int y = 255; y >= 0; y--)
                     {
-                        if ((x + y + z) % 2 == 0) {
-                            chunkLights.SetLight(x, y, z, new Light(0));
-                        } else {
+                        if (voxelStorage.GetVoxel(chunkAbsPosX + x, y, chunkAbsPosZ + z).Id != 0) flag = false;
+                        if (flag) {
                             chunkLights.SetLight(x, y, z, new Light(8));
+                        } else {
+                            chunkLights.SetLight(x, y, z, new Light(0));
                         }
                     }
                 }
