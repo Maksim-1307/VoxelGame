@@ -77,7 +77,7 @@ namespace VoxelGame.Graphics{
 
         private void vertex (float x, float y, float z, float uvx, float uvy) {
             (float r, float g, float b) color;
-            float lihgt = (float)this.LightMap.GetLight(_x, _y, _z).Value / 8.0f;
+            float lihgt = 1.0f - (float)(this.LightMap.GetLight((int)(_x + x), (int)(_y + y), (int)(_z + z)).Value + 6 + this.LightMap.GetLight(_x, _y, _z).Value + 3) / 22.0f;
             color = (lihgt, lihgt, lihgt);
             // if ((x + z + y) % 2 == 0) {
             //     color = (1.0f, 0.0f, 0.0f);

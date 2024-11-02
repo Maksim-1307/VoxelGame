@@ -12,5 +12,6 @@ void main()
 {
     vec4 color = texture(texture0, texCoord);
     if (color.a == 0.0) discard;
-    outputColor = mix(color, vec4(light, 1.0), 0.5);
+    color = mix(color, vec4(0.0, 0.0, 0.0, 1.0), light.r);
+    outputColor = color;
 }
