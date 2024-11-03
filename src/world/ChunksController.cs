@@ -103,13 +103,22 @@ namespace VoxelGame.World{
         public void SetVoxel(int x, int y, int z, Voxel vox){
             _voxelStorage.SetVoxel(x, y, z, vox);
             (int x, int z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
+            //_lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
+            _lightMap.solveLightAt(x, y, z, 8);
+            // _lightMap.solveLightAt(x+1, y, z, (byte)(_lightMap.GetLight(x+1, y, z).Value));
+            // _lightMap.solveLightAt(x-1, y, z, (byte)(_lightMap.GetLight(x-1, y, z).Value));
+            // _lightMap.solveLightAt(x, y+1, z, (byte)(_lightMap.GetLight(x, y+1, z).Value));
+            // _lightMap.solveLightAt(x, y-1, z, _lightMap.GetLight(x, y-1, z).Value);
+            // _lightMap.solveLightAt(x, y, z+1, _lightMap.GetLight(x, y, z-1).Value);
+            // _lightMap.solveLightAt(x, y, z - 1, _lightMap.GetLight(x, y, z - 1).Value);
+
             _worldRenderer.UpdateChunk(chunkPos);
-            _lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
 
             _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
             _worldRenderer.UpdateChunk((chunkPos.x - 1, chunkPos.z));
             _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z + 1));
             _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z - 1));
+
             // if (x % 16 == 0) {
             //     if (x > 0) {
             //         _worldRenderer.UpdateChunk((chunkPos.x-1, chunkPos.z));
