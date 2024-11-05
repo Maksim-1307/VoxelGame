@@ -30,9 +30,8 @@ namespace VoxelGame.Graphics{
 
         public static uint _renderDistance = 6;
 
-        public WorldRenderer(VoxelStorage voxelStorage, LightMap lightMap, Camera camera){
+        public WorldRenderer(VoxelStorage voxelStorage, Camera camera){
             _voxelStorage = voxelStorage;
-            _lightMap = lightMap;
             _camera = camera;
             _texture = Texture.LoadFromFile("res/textures/atlas.png");
             _texture2 = Texture.LoadFromFile("res/textures/atlas.png");

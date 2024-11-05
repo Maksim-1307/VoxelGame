@@ -12,9 +12,8 @@ namespace VoxelGame.World{
 
         private Camera _camera;
         private VoxelStorage _voxelStorage;
-        private LightMap _lightMap;
         private uint _renderDistance = 5;
-        //private ChunkRenderer _meshBuilder;
+        private LightSolver _lightSolver;
         private WorldRenderer _worldRenderer;
 
         private Thread renderingThread;
@@ -23,12 +22,11 @@ namespace VoxelGame.World{
 
         private (int, int) chunkPos;
 
-        public ChunksController(Camera Camera, VoxelStorage VoxelStorage, LightMap lightMap){
+        public ChunksController(Camera Camera, VoxelStorage VoxelStorage, LightSolver lightSolver){
             _camera = Camera;
             _voxelStorage = VoxelStorage;
-            _lightMap = lightMap;
-            //_meshBuilder = new ChunkRenderer(_voxelStorage);
-            _worldRenderer = new WorldRenderer(_voxelStorage, _lightMap, _camera);
+            _worldRenderer = new WorldRenderer(_voxelStorage, _camera);
+            _lightSolver = lightSolver;
             LoadChunk(0,0);
         }
 
@@ -103,6 +101,8 @@ namespace VoxelGame.World{
         public void SetVoxel(int x, int y, int z, Voxel vox){
             _voxelStorage.SetVoxel(x, y, z, vox);
             (int x, int z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
+            _lightSolver.Add(x, y, z, 8);
+            _lightSolver.Solve();
             //_lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
             //_lightMap.solveLightAt(x, y, z, 8);
             // _lightMap.solveLightAt(x+1, y, z, (byte)(_lightMap.GetLight(x+1, y, z).Value));

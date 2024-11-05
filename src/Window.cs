@@ -32,6 +32,7 @@ namespace VoxelGame
         private VoxelStorage voxelStorage;
         private LightMap lightMap;
         private ChunksController chunksController;
+        private LightSolver lightSolver;
         private Canvas canvas;
 
         private Text _text;
@@ -54,9 +55,10 @@ namespace VoxelGame
             loadBlocks();
             generator = new Generator();
             voxelStorage = new VoxelStorage(generator);
+            lightSolver = new LightSolver(voxelStorage, 0);
             //lightMap = new LightMap(voxelStorage);
             _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
-            chunksController = new ChunksController(_camera, voxelStorage, lightMap);
+            chunksController = new ChunksController(_camera, voxelStorage, lightSolver);
             canvas = new Canvas(_camera);
             new AxisLines();
             _text = new Text("");
