@@ -103,8 +103,8 @@ namespace VoxelGame.World{
         public void SetVoxel(int x, int y, int z, Voxel vox){
             _voxelStorage.SetVoxel(x, y, z, vox);
             (int x, int z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
-            //_lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
-            _lightMap.solveLightAt(x, y, z, 8);
+            _lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
+            //_lightMap.solveLightAt(x, y, z, 8);
             // _lightMap.solveLightAt(x+1, y, z, (byte)(_lightMap.GetLight(x+1, y, z).Value));
             // _lightMap.solveLightAt(x-1, y, z, (byte)(_lightMap.GetLight(x-1, y, z).Value));
             // _lightMap.solveLightAt(x, y+1, z, (byte)(_lightMap.GetLight(x, y+1, z).Value));

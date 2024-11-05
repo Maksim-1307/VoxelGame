@@ -19,21 +19,24 @@ namespace VoxelGame.Lighting
 
         public void solveLightAt(int x, int y, int z, byte value){
 
-            if (voxelStorage.GetVoxel(x, y, z).Id != 0) return;
+            if (x*x + z*z > 100) return;
+            if (value <= 1) return;
             byte light = GetLight(x, y, z).Value;
             //Console.WriteLine("Lights updaed33");
             if (light >= value) return;
+
+            if (voxelStorage.GetVoxel(x, y, z).Id != 0) return;
 
             SetLight(x, y, z, new Light(value));
 
             //Console.WriteLine("Lights updaed");
 
-            solveLightAt(x-1, y, z, (byte)(value-1));
-            solveLightAt(x+1, y, z, (byte)(value-1));
-            solveLightAt(x, y-1, z, (byte)(value-1));
-            solveLightAt(x, y+1, z, (byte)(value-1));
-            solveLightAt(x, y, z-1, (byte)(value-1));
-            solveLightAt(x, y, z+1, (byte)(value-1));
+            // solveLightAt(x-1, y, z, (byte)(value-1));
+            // solveLightAt(x+1, y, z, (byte)(value-1));
+            // solveLightAt(x, y-1, z, (byte)(value-1));
+            // solveLightAt(x, y+1, z, (byte)(value-1));
+            // solveLightAt(x, y, z-1, (byte)(value-1));
+            // solveLightAt(x, y, z+1, (byte)(value-1));
         }
 
         private ChunkLightMap generateLights(int chunkX, int chunkZ){
@@ -63,6 +66,32 @@ namespace VoxelGame.Lighting
                 }
             }
 
+            lightMap[(chunkX, chunkZ)] = chunkLights;
+
+
+            for (int x = 0; x < 16; x++)
+            {
+                for (int z = 0; z < 16; z++)
+                {
+                    bool flag = true;
+                    for (int y = 255; y >= 0; y--)
+                    {
+                        if (voxelStorage.GetVoxel(chunkAbsPosX + x, y, chunkAbsPosZ + z).Id != 0) flag = false;
+                        if (flag)
+                        {
+                            solveLightAt(chunkAbsPosX + x, y, chunkAbsPosZ + z, 8);
+                            //chunkLights.SetLight(x, y, z, new Light(0));
+                        }
+                        else
+                        {
+                            //solveLightAt(chunkAbsPosX + x, y, chunkAbsPosZ + z, 0);
+                            //chunkLights.SetLight(x, y, z, new Light(0));
+                        }
+                        // solvingQueue.Enqueue((chunkAbsPosX + x, y, chunkAbsPosZ + z));
+                    }
+                }
+            }
+
             return chunkLights;
         }
 
@@ -71,7 +100,7 @@ namespace VoxelGame.Lighting
             var key = (chunkX, chunkZ);
             if (lightMap.ContainsKey(key))
             {
-                lightMap[key] = generateLights(chunkX, chunkZ);
+                generateLights(chunkX, chunkZ);
             }
         }
 
@@ -124,7 +153,7 @@ namespace VoxelGame.Lighting
                     chunkZ += 1;
                 }
             }
-
+            
             ChunkLightMap chunkMap = GetOrCreateChunkLightMap(chunkX, chunkZ);
             return chunkMap.GetLight(blockX, y, blockZ);
         }
@@ -176,6 +205,9 @@ namespace VoxelGame.Lighting
                     chunkZ += 1;
                 }
             }
+
+            if (y < 0) y = 0;
+            if (y > 255) y = 255;
 
             ChunkLightMap chunkMap = GetOrCreateChunkLightMap(chunkX, chunkZ);
             chunkMap.SetLight(blockX, y, blockZ, light);
