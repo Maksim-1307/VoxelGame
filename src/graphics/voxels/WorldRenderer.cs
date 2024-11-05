@@ -37,7 +37,7 @@ namespace VoxelGame.Graphics{
             _texture = Texture.LoadFromFile("res/textures/atlas.png");
             _texture2 = Texture.LoadFromFile("res/textures/atlas.png");
             _shader = new Shader("res/shaders/shader.vert", "res/shaders/shader.frag");
-            _chunkRenderer = new ChunkRenderer(_voxelStorage, _lightMap);
+            _chunkRenderer = new ChunkRenderer(_voxelStorage);
             _renderThread  = new Thread(handleRenderQueue);
         }
 

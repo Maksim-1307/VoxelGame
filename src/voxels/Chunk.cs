@@ -1,4 +1,5 @@
 using VoxelGame.Graphics;
+using VoxelGame.Lighting;
 using VoxelGame.Logic;
 
 namespace VoxelGame.Voxels{
@@ -9,10 +10,12 @@ namespace VoxelGame.Voxels{
         private const int Depth = 16;
 
         private Voxel[,,] blocks;
+        public LightMap lightMap; 
 
         public Chunk()
         {
             blocks = new Voxel[Width, Height, Depth];
+            lightMap = new LightMap();
         }
 
         public void SetVoxel(int x, int y, int z, Voxel voxel)

@@ -6,7 +6,6 @@ namespace VoxelGame.Graphics{
     public class ChunkRenderer{
 
         private VoxelStorage VoxelStorage;
-        private LightMap LightMap;
 
         private List<float> vertices = new List<float>(1024);
         private List<uint> indices = new List<uint>(256);
@@ -23,9 +22,8 @@ namespace VoxelGame.Graphics{
         private int _z;
         private int _face;
 
-        public ChunkRenderer (VoxelStorage VoxelStorage, LightMap LightMap){
+        public ChunkRenderer (VoxelStorage VoxelStorage){
             this.VoxelStorage = VoxelStorage;
-            this.LightMap = LightMap;
         }
 
         public Mesh BuildMeshOfChunkAt(int chunkX, int chunkZ){
@@ -82,22 +80,22 @@ namespace VoxelGame.Graphics{
             float [] faceDarkening = [0.2f, 0.7f, 0.0f, 0.8f, 0.3f, 0.5f];
             switch(_face){
                 case 0:
-                    light = 1.0f - (float)(this.LightMap.GetLight(_x + 1, _y, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.VoxelStorage.GetLight(_x + 1, _y, _z).Value + 3) / 11.0f;
                     break;
                 case 1:
-                    light = 1.0f - (float)(this.LightMap.GetLight(_x - 1, _y, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.VoxelStorage.GetLight(_x - 1, _y, _z).Value + 3) / 11.0f;
                     break;
                 case 2:
-                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y + 1, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.VoxelStorage.GetLight(_x, _y + 1, _z).Value + 3) / 11.0f;
                     break;
                 case 3:
-                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y - 1, _z).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.VoxelStorage.GetLight(_x, _y - 1, _z).Value + 3) / 11.0f;
                     break;
                 case 4:
-                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z + 1).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.VoxelStorage.GetLight(_x, _y, _z + 1).Value + 3) / 11.0f;
                     break;
                 case 5:
-                    light = 1.0f - (float)(this.LightMap.GetLight(_x, _y, _z - 1).Value + 3) / 11.0f;
+                    light = 1.0f - (float)(this.VoxelStorage.GetLight(_x, _y, _z - 1).Value + 3) / 11.0f;
                     break;
             }
             light = light + faceDarkening[_face] * faceFactor;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using VoxelGame.Lighting;
 
 namespace VoxelGame.Voxels{
 
@@ -59,6 +60,17 @@ namespace VoxelGame.Voxels{
             return chunk.GetVoxel(blockX, y, blockZ);
         }
 
+        public Light GetLight(int x, int y, int z)
+        {
+            (int X, int Z) chunkPos = GetChunkPos(x, y, z);
+
+            if (!chunks.ContainsKey(chunkPos)) return new Light(0);
+            Chunk chunk = chunks[chunkPos];
+
+            (int X, int Y, int Z) blockPos = (x - chunkPos.X * 16, y, z - chunkPos.Z * 16);
+            return chunk.lightMap.GetLight(blockPos.X, blockPos.Y, blockPos.Z);
+        }
+
         public (int x, int z) GetChunkPos(int x, int y, int z)
         {
             int chunkX = (int)MathF.Floor((float)x / 16);
@@ -109,6 +121,14 @@ namespace VoxelGame.Voxels{
 
             Chunk chunk = GetOrCreateChunk(chunkX, chunkZ);
             chunk.SetVoxel(blockX, y, blockZ, voxel);
+        }
+
+        public Chunk? GetChunkByVoxel(int x, int y, int z){
+            (int cx, int cz) pos = GetChunkPos(x, y, z);
+            if (chunks.ContainsKey(pos)) {
+                return chunks[pos];
+            }
+            return null;
         }
     }
 }

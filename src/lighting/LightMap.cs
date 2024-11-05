@@ -1,216 +1,63 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using VoxelGame.Voxels;
-using System.Runtime.CompilerServices;
+using VoxelGame.Graphics;
+using VoxelGame.Logic;
 
 namespace VoxelGame.Lighting
 {
-
-    public class LightMap
+    public class LightMap 
     {
-        public ConcurrentDictionary<(int x, int z), ChunkLightMap> lightMap = new ConcurrentDictionary<(int, int), ChunkLightMap>();
-        private VoxelStorage voxelStorage;
+        private const int Width = 16;
+        private const int Height = 256;
+        private const int Depth = 16;
 
-        public LightMap(VoxelStorage voxelStorage)
+        private Light[,,] lights;
+
+        public LightMap()
         {
-            this.voxelStorage = voxelStorage;
-        }
-
-        public void solveLightAt(int x, int y, int z, byte value){
-
-            if (x*x + z*z > 100) return;
-            if (value <= 1) return;
-            byte light = GetLight(x, y, z).Value;
-            //Console.WriteLine("Lights updaed33");
-            if (light >= value) return;
-
-            if (voxelStorage.GetVoxel(x, y, z).Id != 0) return;
-
-            SetLight(x, y, z, new Light(value));
-
-            //Console.WriteLine("Lights updaed");
-
-            // solveLightAt(x-1, y, z, (byte)(value-1));
-            // solveLightAt(x+1, y, z, (byte)(value-1));
-            // solveLightAt(x, y-1, z, (byte)(value-1));
-            // solveLightAt(x, y+1, z, (byte)(value-1));
-            // solveLightAt(x, y, z-1, (byte)(value-1));
-            // solveLightAt(x, y, z+1, (byte)(value-1));
-        }
-
-        private ChunkLightMap generateLights(int chunkX, int chunkZ){
-            ChunkLightMap chunkLights = new ChunkLightMap();
-
-            int chunkAbsPosX = chunkX * 16;
-            int chunkAbsPosZ = chunkZ * 16;
-
-
-            for (int x = 0; x < 16; x++)
-            {
-                for (int z = 0; z < 16; z++)
+            lights = new Light[Width, Height, Depth];
+            for (int x = 0; x < Width; x++){
+                for (int z = 0; z < Width; z++)
                 {
-                    bool flag = true;
-                    for (int y = 255; y >= 0; y--)
+                    for (int y = 0; y < Height; y++)
                     {
-                        if (voxelStorage.GetVoxel(chunkAbsPosX + x, y, chunkAbsPosZ + z).Id != 0) flag = false;
-                        if (flag) {
-                           //solveLightAt(chunkAbsPosX + x, y, chunkAbsPosZ + z, 8);
-                            chunkLights.SetLight(x, y, z, new Light(0));
-                        } else {
-                            //solveLightAt(chunkAbsPosX + x, y, chunkAbsPosZ + z, 0);
-                            chunkLights.SetLight(x, y, z, new Light(0));
-                        }
-                        // solvingQueue.Enqueue((chunkAbsPosX + x, y, chunkAbsPosZ + z));
+                        lights[x, y, z] = new Light(0);
                     }
                 }
             }
-
-            lightMap[(chunkX, chunkZ)] = chunkLights;
-
-
-            for (int x = 0; x < 16; x++)
-            {
-                for (int z = 0; z < 16; z++)
-                {
-                    bool flag = true;
-                    for (int y = 255; y >= 0; y--)
-                    {
-                        if (voxelStorage.GetVoxel(chunkAbsPosX + x, y, chunkAbsPosZ + z).Id != 0) flag = false;
-                        if (flag)
-                        {
-                            solveLightAt(chunkAbsPosX + x, y, chunkAbsPosZ + z, 8);
-                            //chunkLights.SetLight(x, y, z, new Light(0));
-                        }
-                        else
-                        {
-                            //solveLightAt(chunkAbsPosX + x, y, chunkAbsPosZ + z, 0);
-                            //chunkLights.SetLight(x, y, z, new Light(0));
-                        }
-                        // solvingQueue.Enqueue((chunkAbsPosX + x, y, chunkAbsPosZ + z));
-                    }
-                }
-            }
-
-            return chunkLights;
         }
 
-        public void UpdateChunkLights(int chunkX, int chunkZ)
-        {
-            var key = (chunkX, chunkZ);
-            if (lightMap.ContainsKey(key))
-            {
-                generateLights(chunkX, chunkZ);
-            }
+        public int TestInt(){
+            return 122;
         }
 
-        public ChunkLightMap GetOrCreateChunkLightMap(int chunkX, int chunkZ)
+
+        public void SetLight(int x, int y, int z, Light light)
         {
-            var key = (chunkX, chunkZ);
-            if (!lightMap.ContainsKey(key))
+            if (IsInBounds(x, y, z))
             {
-                lightMap[key] = generateLights(chunkX, chunkZ);
+                lights[x, y, z] = light;
             }
-            return lightMap[key];
+            else
+            {
+                throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
+            }
         }
 
         public Light GetLight(int x, int y, int z)
         {
-            int chunkX = x / 16;
-            int chunkZ = z / 16;
-
-            int blockX = x % 16;
-            int blockZ = z % 16;
-
-            // transformations for negative directions
-            if (chunkX == 0 && x < 0)
+            if (IsInBounds(x, y, z))
             {
-                chunkX = -1;
-                blockX += 16;
+                return lights[x, y, z];
             }
-            else if (chunkX < 0)
+            else
             {
-                blockX += 16;
-                chunkX -= 1;
-                if (blockX == 16)
-                {
-                    blockX = 0;
-                    chunkX += 1;
-                }
+                return new Light(0);
+                //throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
             }
-            if (chunkZ == 0 && z < 0)
-            {
-                chunkZ = -1;
-                blockZ += 16;
-            }
-            else if (chunkZ < 0)
-            {
-                blockZ += 16;
-                chunkZ -= 1;
-                if (blockZ == 16)
-                {
-                    blockZ = 0;
-                    chunkZ += 1;
-                }
-            }
-            
-            ChunkLightMap chunkMap = GetOrCreateChunkLightMap(chunkX, chunkZ);
-            return chunkMap.GetLight(blockX, y, blockZ);
         }
 
-        public (int x, int z) GetChunkPos(int x, int y, int z)
+        private bool IsInBounds(int x, int y, int z)
         {
-            int chunkX = (int)MathF.Floor((float)x / 16);
-            int chunkZ = (int)MathF.Floor((float)z / 16);
-
-            return (chunkX, chunkZ);
-        }
-
-        public void SetLight(int x, int y, int z, Light light)
-        {
-            int chunkX = x / 16;
-            int chunkZ = z / 16;
-
-            int blockX = x % 16;
-            int blockZ = z % 16;
-
-            // transformations for negative directions
-            if (chunkX == 0 && x < 0)
-            {
-                chunkX = -1;
-                blockX += 16;
-            }
-            else if (chunkX < 0)
-            {
-                blockX += 16;
-                chunkX -= 1;
-                if (blockX == 16)
-                {
-                    blockX = 0;
-                    chunkX += 1;
-                }
-            }
-            if (chunkZ == 0 && z < 0)
-            {
-                chunkZ = -1;
-                blockZ += 16;
-            }
-            else if (chunkZ < 0)
-            {
-                blockZ += 16;
-                chunkZ -= 1;
-                if (blockZ == 16)
-                {
-                    blockZ = 0;
-                    chunkZ += 1;
-                }
-            }
-
-            if (y < 0) y = 0;
-            if (y > 255) y = 255;
-
-            ChunkLightMap chunkMap = GetOrCreateChunkLightMap(chunkX, chunkZ);
-            chunkMap.SetLight(blockX, y, blockZ, light);
+            return x >= 0 && x < Width && y >= 0 && y < Height && z >= 0 && z < Depth;
         }
     }
 }
