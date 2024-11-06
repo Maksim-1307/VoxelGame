@@ -12,12 +12,12 @@ namespace VoxelGame.Time{
         private uint fps = 0;
         private uint frames = 0;
         private Stopwatch stopwatch;
-        //private Text fpsText;
+        private Text fpsText;
 
         public FPSCounter(){            
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            //fpsText = new Text("fps " + fps);
+            fpsText = new Text("fps " + fps);
         }
 
         public override void Update(){
@@ -26,7 +26,7 @@ namespace VoxelGame.Time{
             {
                 fps = frames;
                 Console.WriteLine(fps);
-                //fpsText.Update("fps " + fps);
+                fpsText.Update("fps " + fps);
                 frames = 0;
                 stopwatch.Restart();
             }

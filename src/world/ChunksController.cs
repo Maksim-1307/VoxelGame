@@ -108,10 +108,12 @@ namespace VoxelGame.World{
 
             _worldRenderer.UpdateChunk(chunkPos);
 
-            _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
-            _worldRenderer.UpdateChunk((chunkPos.x - 1, chunkPos.z));
-            _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z + 1));
-            _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z - 1));
+            if (x % 16 == 0 || x % 16 == 15 || z % 16 == 0 || z % 16 == 15){
+                _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
+                _worldRenderer.UpdateChunk((chunkPos.x - 1, chunkPos.z));
+                _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z + 1));
+                _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z - 1));
+            }
 
             // if (x % 16 == 0) {
             //     if (x > 0) {

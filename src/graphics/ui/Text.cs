@@ -115,7 +115,8 @@ namespace VoxelGame.Graphics{
         }
 
         private void vertex (float x, float y, float z, float uvx, float uvy) {
-            vertices.AddRange([ offset.x + x, offset.y + y, z,  uvx,  uvy]);
+            // x y z u v r g b
+            vertices.AddRange([ offset.x + x, offset.y + y, z,  uvx,  uvy, 0.0f, 0.0f, 0.0f]);
         }
 
         private void index(uint a, uint b, uint c, uint d, uint e, uint f) {
