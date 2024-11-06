@@ -24,6 +24,16 @@ namespace VoxelGame.Voxels{
             return chunks[key];
         }
 
+        public Chunk? GetChunk(int chunkX, int chunkZ)
+        {
+            var key = (chunkX, chunkZ);
+            if (!chunks.ContainsKey(key))
+            {
+                return null;
+            }
+            return chunks[key];
+        }
+
         public Voxel GetVoxel(int x, int y, int z)
         {
             int chunkX = x / 16;

@@ -18,7 +18,7 @@ namespace VoxelGame
 {
     public class Window : GameWindow
     {
-        private Camera _camera;
+        //private Camera _camera;
 
         private bool _firstMove = true;
 
@@ -26,12 +26,6 @@ namespace VoxelGame
 
         private double _time;
 
-        private FPSCounter FPSCounter;
-
-        private Generator generator;
-        private VoxelStorage voxelStorage;
-        private LightMap lightMap;
-        private ChunksController chunksController;
         private LightSolver lightSolver;
         private Canvas canvas;
 
@@ -52,20 +46,21 @@ namespace VoxelGame
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
+            CursorState = CursorState.Grabbed;
+
             loadBlocks();
-            generator = new Generator();
-            voxelStorage = new VoxelStorage(generator);
-            lightSolver = new LightSolver(voxelStorage, 0);
-            //lightMap = new LightMap(voxelStorage);
-            _camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
-            chunksController = new ChunksController(_camera, voxelStorage, lightSolver);
-            canvas = new Canvas(_camera);
+
+            Globals.generator = new Generator();
+            Globals.voxelStorage = new VoxelStorage(Globals.generator);
+            Globals.lightSolver = new LightSolver(Globals.voxelStorage, 0);
+            Globals.camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
+            Globals.chunksController = new ChunksController(Globals.camera, Globals.voxelStorage, Globals.lightSolver);
+            Globals.canvas = new Canvas(Globals.camera);
+
             new AxisLines();
             _text = new Text("");
 
-            CursorState = CursorState.Grabbed;
-
-            FPSCounter = new FPSCounter();
+            Globals.fpsCounter = new FPSCounter();
         }
 
         protected void loadBlocks(){
@@ -108,8 +103,8 @@ namespace VoxelGame
 
             if (mouse.IsButtonDown(MouseButton.Right))
             {
-                if (chunksController.RayCast(_camera.Position, _camera.Front, 10.0f) != null){
-                    chunksController.RayCast(_camera.Position, _camera.Front, 10.0f);
+                if (Globals.chunksController.RayCast(Globals.camera.Position, Globals.camera.Front, 10.0f) != null){
+                    Globals.chunksController.RayCast(Globals.camera.Position, Globals.camera.Front, 10.0f);
                     ///_text.Update("the voxel id is " + vox.Id);
                 }
             }
@@ -131,28 +126,28 @@ namespace VoxelGame
 
             if (input.IsKeyDown(Keys.W))
             {
-                _camera.Position += _camera.Front * cameraSpeed * (float)e.Time; // Forward
+                Globals.camera.Position += Globals.camera.Front * cameraSpeed * (float)e.Time; // Forward
             }
 
             if (input.IsKeyDown(Keys.S))
             {
-                _camera.Position -= _camera.Front * cameraSpeed * (float)e.Time; // Backwards
+                Globals.camera.Position -= Globals.camera.Front * cameraSpeed * (float)e.Time; // Backwards
             }
             if (input.IsKeyDown(Keys.A))
             {
-                _camera.Position -= _camera.Right * cameraSpeed * (float)e.Time; // Left
+                Globals.camera.Position -= Globals.camera.Right * cameraSpeed * (float)e.Time; // Left
             }
             if (input.IsKeyDown(Keys.D))
             {
-                _camera.Position += _camera.Right * cameraSpeed * (float)e.Time; // Right
+                Globals.camera.Position += Globals.camera.Right * cameraSpeed * (float)e.Time; // Right
             }
             if (input.IsKeyDown(Keys.Space))
             {
-                _camera.Position += _camera.Up * cameraSpeed * (float)e.Time; // Up
+                Globals.camera.Position += Globals.camera.Up * cameraSpeed * (float)e.Time; // Up
             }
             if (input.IsKeyDown(Keys.LeftShift))
             {
-                _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
+                Globals.camera.Position -= Globals.camera.Up * cameraSpeed * (float)e.Time; // Down
             }
 
             if (_firstMove) 
@@ -166,8 +161,8 @@ namespace VoxelGame
                 var deltaY = mouse.Y - _lastPos.Y;
                 _lastPos = new Vector2(mouse.X, mouse.Y);
 
-                _camera.Yaw += deltaX * sensitivity;
-                _camera.Pitch -= deltaY * sensitivity; 
+                Globals.camera.Yaw += deltaX * sensitivity;
+                Globals.camera.Pitch -= deltaY * sensitivity; 
             }
         }
 
@@ -175,7 +170,7 @@ namespace VoxelGame
         {
             base.OnMouseWheel(e);
 
-            _camera.Fov -= e.OffsetY;
+            Globals.camera.Fov -= e.OffsetY;
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -183,7 +178,7 @@ namespace VoxelGame
             base.OnResize(e);
 
             GL.Viewport(0, 0, Size.X * 2, Size.Y * 2);
-            _camera.AspectRatio = Size.X / (float)Size.Y;
+            Globals.camera.AspectRatio = Size.X / (float)Size.Y;
         }
     }
 }

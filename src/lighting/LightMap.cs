@@ -8,6 +8,7 @@ namespace VoxelGame.Lighting
         private const int Width = 16;
         private const int Height = 256;
         private const int Depth = 16;
+        public int highestPoint = 0;
 
         private Light[,,] lights;
 
