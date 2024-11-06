@@ -8,10 +8,8 @@ namespace VoxelGame.Voxels{
     public class VoxelStorage
     {
         public ConcurrentDictionary<(int x, int z), Chunk> chunks = new ConcurrentDictionary<(int, int), Chunk>();
-        public Generator Generator;
 
-        public VoxelStorage (Generator generator) {
-            this.Generator = generator;
+        public VoxelStorage () {
         }
 
         public Chunk GetOrCreateChunk(int chunkX, int chunkZ)
@@ -19,7 +17,8 @@ namespace VoxelGame.Voxels{
             var key = (chunkX, chunkZ);
             if (!chunks.ContainsKey(key))
             {
-                chunks[key] = Generator.GenerateChunkAt(chunkX, chunkZ);
+                chunks[key] = Globals.generator.GenerateChunkAt(chunkX, chunkZ);
+                Globals.lighting.PreBuildSkyLight(chunks[key]);
             }
             return chunks[key];
         }

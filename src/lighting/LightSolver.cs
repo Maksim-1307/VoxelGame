@@ -17,11 +17,10 @@ namespace VoxelGame.Lighting{
 
     public class LightSolver {
 
-        private VoxelStorage _voxelStorage;
+        private VoxelStorage _voxelStorage = Globals.voxelStorage;
         private int _channel;
         private Queue<LightEntry> AddQueue;
-        public LightSolver(VoxelStorage voxelStorage, int channel){
-            _voxelStorage = voxelStorage;
+        public LightSolver(int channel){
             _channel = channel;
             AddQueue = new Queue<LightEntry>();
         }

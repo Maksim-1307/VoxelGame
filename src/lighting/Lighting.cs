@@ -6,11 +6,11 @@ namespace VoxelGame.Lighting{
         private LightSolver solver;
         private VoxelStorage voxelStorage;
         public Lighting(VoxelStorage voxelStorage){
-            solver = new LightSolver(voxelStorage, 0);
+            solver = new LightSolver(0);
             this.voxelStorage = voxelStorage;
         }
 
-        void PreBuildSkyLight(Chunk chunk){
+        public void PreBuildSkyLight(Chunk chunk){
 
             int highestPoint = 0;
             for (int z = 0; z < 16; z++)
@@ -34,7 +34,7 @@ namespace VoxelGame.Lighting{
             chunk.lightMap.highestPoint = highestPoint;
         }
 
-        void BuildSkyLight(int cx, int cz)
+        public void BuildSkyLight(int cx, int cz)
         {
             Chunk chunk = voxelStorage.GetChunk(cx, cz);
             for (int z = 0; z < 16; z++)
@@ -67,7 +67,7 @@ namespace VoxelGame.Lighting{
         }
 
 
-        void OnChunkLoaded(int cx, int cz, bool expand)
+        public void OnChunkLoaded(int cx, int cz, bool expand)
         {
             Chunk chunk = voxelStorage.GetChunk(cx, cz);
 

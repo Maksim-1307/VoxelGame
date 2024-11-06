@@ -10,10 +10,9 @@ using System.Collections.Concurrent;
 namespace VoxelGame.World{
     public class ChunksController : GameObject{
 
-        private Camera _camera;
-        private VoxelStorage _voxelStorage;
+        private Camera _camera = Globals.camera;
+        private VoxelStorage _voxelStorage = Globals.voxelStorage;
         private uint _renderDistance = 5;
-        private LightSolver _lightSolver;
         private WorldRenderer _worldRenderer;
 
         private Thread renderingThread;
@@ -22,11 +21,8 @@ namespace VoxelGame.World{
 
         private (int, int) chunkPos;
 
-        public ChunksController(Camera Camera, VoxelStorage VoxelStorage, LightSolver lightSolver){
-            _camera = Camera;
-            _voxelStorage = VoxelStorage;
+        public ChunksController(){
             _worldRenderer = new WorldRenderer(_voxelStorage, _camera);
-            _lightSolver = lightSolver;
             LoadChunk(0,0);
         }
 
@@ -101,8 +97,6 @@ namespace VoxelGame.World{
         public void SetVoxel(int x, int y, int z, Voxel vox){
             _voxelStorage.SetVoxel(x, y, z, vox);
             (int x, int z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
-            _lightSolver.Add(x, y, z, 8);
-            _lightSolver.Solve();
             //_lightMap.UpdateChunkLights(chunkPos.x, chunkPos.z);
             //_lightMap.solveLightAt(x, y, z, 8);
             // _lightMap.solveLightAt(x+1, y, z, (byte)(_lightMap.GetLight(x+1, y, z).Value));

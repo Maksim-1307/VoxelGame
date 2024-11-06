@@ -50,12 +50,8 @@ namespace VoxelGame
 
             loadBlocks();
 
-            Globals.generator = new Generator();
-            Globals.voxelStorage = new VoxelStorage(Globals.generator);
-            Globals.lightSolver = new LightSolver(Globals.voxelStorage, 0);
-            Globals.camera = new Camera(Vector3.UnitZ * 3, Size.X / (float)Size.Y);
-            Globals.chunksController = new ChunksController(Globals.camera, Globals.voxelStorage, Globals.lightSolver);
-            Globals.canvas = new Canvas(Globals.camera);
+            Globals.window = this;
+            Globals.Init();
 
             new AxisLines();
             _text = new Text("");

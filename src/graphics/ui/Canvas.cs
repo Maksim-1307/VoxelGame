@@ -4,9 +4,8 @@ using System.Collections.Concurrent;
 
 namespace VoxelGame.Graphics{
     public class Canvas : GameObject {
-        private Camera _camera;
-        public Canvas(Camera camera){
-            _camera = camera;
+        private Camera _camera = Globals.camera;
+        public Canvas(){
         }
         public override void Update () {
             Draw();

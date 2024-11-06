@@ -99,6 +99,7 @@ namespace VoxelGame.Graphics{
 
             while (_renderQueue.Count > 0){
                 (int x, int z) chunkPos = _renderQueue.Dequeue();
+                Globals.lighting.BuildSkyLight(chunkPos.x, chunkPos.z);
                 chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);                
             }
             return;
