@@ -26,10 +26,6 @@ namespace VoxelGame.Lighting
             }
         }
 
-        public int TestInt(){
-            return 122;
-        }
-
 
         public void SetLight(int x, int y, int z, Light light)
         {
@@ -39,7 +35,8 @@ namespace VoxelGame.Lighting
             }
             else
             {
-                throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
+                // Console.WriteLine(x + " " + y + " " + z);
+                // throw new ArgumentOutOfRangeException("Coordinates out of bounds.");
             }
         }
 

@@ -31,6 +31,9 @@ namespace VoxelGame
 
         private Text _text;
 
+
+        private bool previousMouseState = false;
+
         public Window(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
             : base(gameWindowSettings, nativeWindowSettings)
         {}
@@ -43,6 +46,8 @@ namespace VoxelGame
 
             GL.ClearColor(0.67f, 0.84f, 0.9f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
+            //GL.Enable(EnableCap.CullFace);
+            //glEnable(GL_STENCIL_TEST);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
@@ -52,9 +57,10 @@ namespace VoxelGame
 
             Globals.window = this;
             Globals.Init();
+            Globals.camera.Position = new Vector3(0.0f, 50.0f, 0.0f);
 
             new AxisLines();
-            _text = new Text("");
+            _text = new Text("VoxelGame indev 061124");
 
             Globals.fpsCounter = new FPSCounter();
         }
@@ -73,7 +79,7 @@ namespace VoxelGame
             _time += 4.0 * e.Time;
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GameObject.GameObjectsUpdate();
+            GameObject.GameObjectsUpdate((float)e.Time);
 
             SwapBuffers();
 
@@ -97,12 +103,18 @@ namespace VoxelGame
             var input = KeyboardState;
             var mouse = MouseState;
 
-            if (mouse.IsButtonDown(MouseButton.Right))
+            if (mouse.IsButtonDown(MouseButton.Left))
             {
-                if (Globals.chunksController.RayCast(Globals.camera.Position, Globals.camera.Front, 10.0f) != null){
-                    Globals.chunksController.RayCast(Globals.camera.Position, Globals.camera.Front, 10.0f);
-                    ///_text.Update("the voxel id is " + vox.Id);
-                }
+                if (!previousMouseState){
+                    // if (Globals.chunksController.RayCast(Globals.camera.Position, Globals.camera.Front, 10.0f) != null)
+                    // {
+                        Globals.chunksController.RayCast(Globals.camera.Position, Globals.camera.Front, 10.0f);
+                        ///_text.Update("the voxel id is " + vox.Id);
+                    //}
+                } 
+                previousMouseState = true;
+            } else {
+                previousMouseState = false;
             }
 
 

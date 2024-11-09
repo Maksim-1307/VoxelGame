@@ -7,7 +7,7 @@ namespace VoxelGame.Graphics{
         private Camera _camera = Globals.camera;
         public Canvas(){
         }
-        public override void Update () {
+        public override void Update (float deltaTime) {
             Draw();
         }
         public void Draw(){

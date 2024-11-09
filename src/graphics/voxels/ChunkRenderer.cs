@@ -8,7 +8,7 @@ namespace VoxelGame.Graphics{
         private VoxelStorage VoxelStorage;
 
         private List<float> vertices = new List<float>(1024);
-        private List<uint> indices = new List<uint>(256);
+        private List<uint> indices = new List<uint>(512);
         private uint indexOffset = 0;
         const uint ATLAS_SIZE = 8;
 

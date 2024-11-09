@@ -1,5 +1,7 @@
 global using static FastNoiseLite;
 
+using VoxelGame.Lighting;
+
 namespace VoxelGame.Voxels{
     public class Generator {
 
@@ -28,14 +30,24 @@ namespace VoxelGame.Voxels{
                     for (int y = 0; y < 256; y++){
                         //Console.WriteLine(height);
                         if (y < height) {
-                            if (y < 30){
-                                chunk.SetVoxel(x, y, z, new Voxel(1, 0));
+                            float noise3d = noise.GetNoise(chunkAbsPosX + x, y, chunkAbsPosZ + z);
+                            if(noise3d <= 0.26) {
+                                if (y < 30)
+                                {
+                                    chunk.SetVoxel(x, y, z, new Voxel(1, 0));
+                                }
+                                else
+                                {
+                                    chunk.SetVoxel(x, y, z, new Voxel(2, 0));
+                                }
                             } else {
-                                chunk.SetVoxel(x, y, z, new Voxel(2, 0));
+                                chunk.SetVoxel(x, y, z, new Voxel(0, 0));
                             }
+                            
                         } else {
                             chunk.SetVoxel(x, y, z, new Voxel(0,0));
                         }
+                        if (y == 0) chunk.SetVoxel(x, y, z, new Voxel(1, 0));
                     }
                 }
             }

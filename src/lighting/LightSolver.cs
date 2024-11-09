@@ -101,13 +101,17 @@ namespace VoxelGame.Lighting{
 
                     Chunk chunk = _voxelStorage.GetChunkByVoxel(x, y, z);
                     (int X, int Z) chunkPos = _voxelStorage.GetChunkPos(x, y, z);
-                    if (chunk == null) i++;
+                    if (chunk == null) continue;
 
                     int lx = x - chunkPos.X * 16;
                     int lz = z - chunkPos.Z * 16;
                     //chunk->flags.modified = true;
 
-                    byte light = chunk.lightMap.GetLight(lx, y, lz).Value;
+                    //if (chunk.lightMap.GetLight(lx, y, lz) == null) i++;
+                    LightMap lm = chunk.lightMap;
+                    Light l = lm.GetLight(lx, y, lz);
+                    //if (l == null) i++;
+                    byte light = l.Value;
                     Voxel voxel = chunk.GetVoxel(lx, y, lz);
                     Block block = Block.GetBlockByVoxelId(voxel.Id);
 

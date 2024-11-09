@@ -10,11 +10,12 @@ namespace VoxelGame.Logic{
         }
 
         public virtual void Start(){}
-        public virtual void Update(){}
+        public virtual void Update(float deltaTime){}
 
-        public static void GameObjectsUpdate(){
+        public static void GameObjectsUpdate(float deltaTime)
+        {
             for (int i = 0; i < ObjectsArray.Count; i++){
-                ObjectsArray.ToArray()[i].Update();
+                ObjectsArray.ToArray()[i].Update(deltaTime);
             }
         }
         public static void GameObjectsStart(){

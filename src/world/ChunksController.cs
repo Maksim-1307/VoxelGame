@@ -30,7 +30,7 @@ namespace VoxelGame.World{
             LoadChunk(0, 0);
         }
 
-        public override void Update(){
+        public override void Update(float deltaTime){
             if (UpdateChunkPos()) LoadChunk(chunkPos.Item1, chunkPos.Item2);
             _worldRenderer.renderChunks(chunkPos);
         }
@@ -108,12 +108,14 @@ namespace VoxelGame.World{
 
             _worldRenderer.UpdateChunk(chunkPos);
 
-            if (x % 16 == 0 || x % 16 == 15 || z % 16 == 0 || z % 16 == 15){
-                _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
+            //if (x % 16 == 0 || x % 16 == 15 || z % 16 == 0 || z % 16 == 15){
+            _worldRenderer.UpdateChunk((chunkPos.x + 1, chunkPos.z));
                 _worldRenderer.UpdateChunk((chunkPos.x - 1, chunkPos.z));
                 _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z + 1));
                 _worldRenderer.UpdateChunk((chunkPos.x, chunkPos.z - 1));
-            }
+            //}
+
+            
 
             // if (x % 16 == 0) {
             //     if (x > 0) {

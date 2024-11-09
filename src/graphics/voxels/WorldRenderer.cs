@@ -17,14 +17,13 @@ namespace VoxelGame.Graphics{
         public Dictionary<(int x, int z), Mesh> chunksMeshes = new Dictionary<(int, int), Mesh>();
 
         private VoxelStorage _voxelStorage;
-        private LightMap _lightMap;
         private Shader _shader;
         private Texture _texture;
         private Texture _texture2;
         private Camera _camera;
         private ChunkRenderer _chunkRenderer;
 
-        private Queue<(int chunkX, int chunkZ)> _renderQueue = new Queue<(int chunkX, int chunkZ)>();
+        private LinkedList<(int chunkX, int chunkZ)> _renderQueue = new LinkedList<(int chunkX, int chunkZ)>();
 
         private Thread _renderThread;
 
@@ -82,7 +81,7 @@ namespace VoxelGame.Graphics{
 
             if (!chunksMeshes.ContainsKey(key))
             {
-                if (!_renderQueue.Contains(key)) _renderQueue.Enqueue(key);
+                if (!_renderQueue.Contains(key)) _renderQueue.AddLast(key);
                 return null;
             } else {
                 return chunksMeshes[key];
@@ -98,15 +97,22 @@ namespace VoxelGame.Graphics{
         void handleRenderQueue(){
 
             while (_renderQueue.Count > 0){
-                (int x, int z) chunkPos = _renderQueue.Dequeue();
+                (int x, int z) chunkPos = _renderQueue.First.Value;
                 Globals.lighting.BuildSkyLight(chunkPos.x, chunkPos.z);
-                chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);                
+                chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);     
+                _renderQueue.RemoveFirst();           
             }
             return;
         }
 
         public void UpdateChunk((int x, int z) chunkPos) {
-            _renderQueue.Enqueue(chunkPos);
+            _renderQueue.AddFirst(chunkPos);
+        }
+
+        public void ForceUpdateChunk((int x, int z) chunkPos)
+        {
+            Globals.lighting.BuildSkyLight(chunkPos.x, chunkPos.z);
+            chunksMeshes[chunkPos] = _chunkRenderer.BuildMeshOfChunkAt(chunkPos.Item1, chunkPos.Item2);
         }
     }
 }

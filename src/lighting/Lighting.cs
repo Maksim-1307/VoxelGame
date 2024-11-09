@@ -1,4 +1,5 @@
 using System.Threading.Tasks.Sources;
+using VoxelGame.Lighting;
 using VoxelGame.Voxels;
 
 namespace VoxelGame.Lighting{
@@ -125,8 +126,8 @@ namespace VoxelGame.Lighting{
             solver.Solve();
         }
 
-    }
-}
+    
+
 
         // public void Clear(){
         //     for (int index = 0; index < voxelStorage.chunks.Count; index++)
@@ -142,67 +143,66 @@ namespace VoxelGame.Lighting{
         //     }
         // }
 
-/*
-void Lighting::onBlockSet(int x, int y, int z, blockid_t id){
-    Block* block = content->getIndices()->getBlockDef(id);
-    solverR->remove(x, y, z);
-    solverG->remove(x, y, z);
-    solverB->remove(x, y, z);
 
-    if (id == 0)
-    {
-        solverR->solve();
-        solverG->solve();
-        solverB->solve();
-        if (chunks->getLight(x, y + 1, z, 3) == 0xF)
-        {
-            for (int i = y; i >= 0; i--)
+        public void OnBlockSet(int x, int y, int z, byte voxelId){
+            Block block = Block.GetBlockByVoxelId(voxelId);
+            
+            // solverR->remove(x, y, z);
+            // solverG->remove(x, y, z);
+            // solverB->remove(x, y, z);
+
+            if (voxelId == 0)
             {
-                voxel* vox = chunks->get(x, i, z);
-                if ((vox == nullptr || vox->id != 0) && block->skyLightPassing)
-                    break;
-                solverS->add(x, i, z, 0xF);
-            }
-        }
-        solverR->add(x, y + 1, z); solverG->add(x, y + 1, z); solverB->add(x, y + 1, z); solverS->add(x, y + 1, z);
-        solverR->add(x, y - 1, z); solverG->add(x, y - 1, z); solverB->add(x, y - 1, z); solverS->add(x, y - 1, z);
-        solverR->add(x + 1, y, z); solverG->add(x + 1, y, z); solverB->add(x + 1, y, z); solverS->add(x + 1, y, z);
-        solverR->add(x - 1, y, z); solverG->add(x - 1, y, z); solverB->add(x - 1, y, z); solverS->add(x - 1, y, z);
-        solverR->add(x, y, z + 1); solverG->add(x, y, z + 1); solverB->add(x, y, z + 1); solverS->add(x, y, z + 1);
-        solverR->add(x, y, z - 1); solverG->add(x, y, z - 1); solverB->add(x, y, z - 1); solverS->add(x, y, z - 1);
-        solverR->solve();
-        solverG->solve();
-        solverB->solve();
-        solverS->solve();
-    }
-    else
-    {
-        if (!block->skyLightPassing)
-        {
-            solverS->remove(x, y, z);
-            for (int i = y - 1; i >= 0; i--)
-            {
-                solverS->remove(x, i, z);
-                if (i == 0 || chunks->get(x, i - 1, z)->id != 0)
+                solver.Solve();
+                // solverG->solve();
+                // solverB->solve();
+                if (voxelStorage.GetLight(x, y + 1, z).Value == 15)
                 {
-                    break;
+                    for (int i = y; i >= 0; i--)
+                    {
+                        Voxel vox = voxelStorage.GetVoxel(x, i, z);
+                        if (vox.Id == 0)
+                            break;
+                        solver.Add(x, i, z, 15);
+                    }
                 }
+                solver.Add(x, y + 1, z);
+                solver.Add(x, y - 1, z);
+                solver.Add(x + 1, y, z);
+                solver.Add(x - 1, y, z);
+                solver.Add(x, y, z + 1);
+                solver.Add(x, y, z - 1);
+                solver.Solve();
             }
-            solverS->solve();
-        }
-        solverR->solve();
-        solverG->solve();
-        solverB->solve();
+            else
+            {
+                // if (voxelId == 0)
+                // {
+                //     //solverS->remove(x, y, z);
+                //     for (int i = y - 1; i >= 0; i--)
+                //     {
+                //         solverS->remove(x, i, z);
+                //         if (i == 0 || chunks->get(x, i - 1, z)->id != 0)
+                //         {
+                //             break;
+                //         }
+                //     }
+                //     solverS->solve();
+                // }
+                // solverR->solve();
+                // solverG->solve();
+                // solverB->solve();
 
-        if (block->emission[0] || block->emission[1] || block->emission[2])
-        {
-            solverR->add(x, y, z, block->emission[0]);
-            solverG->add(x, y, z, block->emission[1]);
-            solverB->add(x, y, z, block->emission[2]);
-            solverR->solve();
-            solverG->solve();
-            solverB->solve();
+                // if (block->emission[0] || block->emission[1] || block->emission[2])
+                // {
+                //     solverR->add(x, y, z, block->emission[0]);
+                //     solverG->add(x, y, z, block->emission[1]);
+                //     solverB->add(x, y, z, block->emission[2]);
+                //     solverR->solve();
+                //     solverG->solve();
+                //     solverB->solve();
+                // }
+            }
         }
     }
 }
-*/
